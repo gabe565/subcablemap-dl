@@ -28,12 +28,12 @@ type Downloader struct {
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
 func (d *Downloader) Do(ctx context.Context) (*image.NRGBA, error) {
-	img := image.NewNRGBA(image.Rect(0, 0, d.config.TileSize*(d.config.TileMaxX+1), d.config.TileSize*(d.config.TileMaxY+1)))
+	img := image.NewNRGBA(image.Rect(0, 0, d.config.OutputWidth(), d.config.OutputHeight()))
 	tileChan := make(chan image.Point)
 	group, ctx := errgroup.WithContext(ctx)
 
 	slog.Info("Spawning downloaders", "count", d.config.Parallelism)
-	bar := progressbar.Default(int64(d.config.TileMaxX*d.config.TileMaxY), "Creating mosaic")
+	bar := progressbar.Default(int64(d.config.TileCount()), "Creating mosaic")
 	for range d.config.Parallelism {
 		group.Go(func() error {
 			for tile := range tileChan {
@@ -57,8 +57,14 @@ func (d *Downloader) Do(ctx context.Context) (*image.NRGBA, error) {
 				}
 				_ = resp.Body.Close()
 
-				pt := image.Point{X: tile.X * d.config.TileSize, Y: tile.Y * d.config.TileSize}
-				r := image.Rectangle{Min: pt, Max: pt.Add(image.Point{X: d.config.TileSize, Y: d.config.TileSize})}
+				pt := image.Point{
+					X: (tile.X - d.config.Tiles.Min.X) * d.config.TileSize,
+					Y: (tile.Y - d.config.Tiles.Min.Y) * d.config.TileSize,
+				}
+				r := image.Rectangle{
+					Min: pt,
+					Max: pt.Add(image.Point{X: d.config.TileSize, Y: d.config.TileSize}),
+				}
 				draw.Draw(img, r, tileData, image.Point{}, draw.Src)
 				_ = bar.Add(1)
 			}
@@ -69,8 +75,8 @@ func (d *Downloader) Do(ctx context.Context) (*image.NRGBA, error) {
 
 	group.Go(func() error {
 		defer close(tileChan)
-		for x := range d.config.TileMaxX {
-			for y := range d.config.TileMaxY {
+		for x := d.config.Tiles.Min.X; x <= d.config.Tiles.Max.X; x++ {
+			for y := d.config.Tiles.Min.Y; y <= d.config.Tiles.Max.Y; y++ {
 				select {
 				case <-ctx.Done():
 					return ctx.Err()
