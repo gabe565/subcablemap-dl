@@ -65,7 +65,6 @@ func run(cmd *cobra.Command, _ []string) error {
 
 	bar := progressbar.DefaultBytes(-1, "Writing to file")
 	if err := png.Encode(io.MultiWriter(out, bar), img); err != nil {
-		_ = bar.Finish()
 		return err
 	}
 	_ = bar.Finish()
