@@ -40,6 +40,7 @@ func run(cmd *cobra.Command, _ []string) error {
 	if conf.Year == 0 {
 		conf.Year = time.Now().Year()
 	}
+	conf.DetermineOffsetsByYear()
 
 	dl := downloader.New(conf)
 
