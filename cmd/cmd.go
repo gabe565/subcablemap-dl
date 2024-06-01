@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"os"
 	"strconv"
-	"time"
 
 	"github.com/gabe565/submarine-cable-map-downloader/internal/config"
 	"github.com/gabe565/submarine-cable-map-downloader/internal/downloader"
@@ -37,16 +36,12 @@ func run(cmd *cobra.Command, _ []string) error {
 		panic("Config not added to context")
 	}
 
-	if conf.Year == 0 {
-		conf.Year = time.Now().Year()
-	}
-	conf.DetermineOffsetsByYear()
-
 	dl := downloader.New(conf)
 
 	if err := dl.CheckYear(cmd.Context()); err != nil {
 		return err
 	}
+	conf.DetermineOffsetsByYear()
 
 	if err := dl.FindFormat(); err != nil {
 		return err

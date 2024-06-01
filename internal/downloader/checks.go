@@ -8,11 +8,18 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 var ErrMissingYear = errors.New("could not find year")
 
 func (d *Downloader) CheckYear(ctx context.Context) error {
+	var latest bool
+	if d.config.Year == 0 {
+		latest = true
+		d.config.Year = time.Now().Year()
+	}
+
 	url := "https://submarine-cable-map-" + strconv.Itoa(d.config.Year) + ".telegeography.com"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
@@ -22,6 +29,10 @@ func (d *Downloader) CheckYear(ctx context.Context) error {
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil || resp.StatusCode != http.StatusOK {
+		if latest {
+			d.config.Year--
+			return d.CheckYear(ctx)
+		}
 		return fmt.Errorf("%w: %d", ErrMissingYear, d.config.Year)
 	}
 	_, _ = io.Copy(io.Discard, resp.Body)

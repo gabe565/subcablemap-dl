@@ -10,7 +10,7 @@ const (
 )
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
-	cmd.Flags().IntVar(&c.Year, "year", 0, "Year to download (default current year)")
+	cmd.Flags().IntVar(&c.Year, "year", 0, "Year to download (default latest available)")
 	cmd.Flags().IntVar(&c.TileSize, "tile-size", 256, "Tile size")
 	cmd.Flags().IntVar(&c.Tiles.Min.X, "tile-min-x", DefaultFetchMin, "X tile min (default determined by year)")
 	cmd.Flags().IntVar(&c.Tiles.Max.X, "tile-max-x", DefaultFetchMax, "X tile max (default determined by year)")
