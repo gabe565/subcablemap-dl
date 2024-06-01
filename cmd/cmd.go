@@ -63,6 +63,9 @@ func run(cmd *cobra.Command, _ []string) error {
 	if err != nil {
 		return err
 	}
+	defer func() {
+		_ = out.Close()
+	}()
 
 	bar := progressbar.DefaultBytes(-1, "Writing to file")
 	if err := png.Encode(io.MultiWriter(out, bar), img); err != nil {
@@ -72,5 +75,5 @@ func run(cmd *cobra.Command, _ []string) error {
 	_, _ = io.WriteString(os.Stderr, "\n")
 
 	slog.Info("Done", "path", path)
-	return nil
+	return out.Close()
 }
