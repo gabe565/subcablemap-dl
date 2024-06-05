@@ -3,7 +3,7 @@
 
 
 ```
-submarine-cable-map-downloader [flags]
+submarine-cable-map-downloader [path] [flags]
 ```
 
 ### Options

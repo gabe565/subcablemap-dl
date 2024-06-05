@@ -16,7 +16,7 @@ import (
 
 func New() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "submarine-cable-map-downloader",
+		Use:  "submarine-cable-map-downloader [path]",
 		RunE: run,
 
 		DisableAutoGenTag: true,
@@ -28,7 +28,7 @@ func New() *cobra.Command {
 	return cmd
 }
 
-func run(cmd *cobra.Command, _ []string) error {
+func run(cmd *cobra.Command, args []string) error {
 	cmd.SilenceUsage = true
 
 	conf, ok := config.FromContext(cmd.Context())
@@ -53,6 +53,10 @@ func run(cmd *cobra.Command, _ []string) error {
 	}
 
 	path := "submarine-cable-map-" + strconv.Itoa(conf.Year) + ".png"
+	if len(args) > 0 {
+		path = args[0]
+	}
+
 	slog.Info("Creating file", "path", path)
 	out, err := os.Create(path)
 	if err != nil {
