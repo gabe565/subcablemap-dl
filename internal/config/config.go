@@ -5,6 +5,7 @@ import "image"
 type Config struct {
 	Year        int
 	TileSize    int
+	NoCrop      bool
 	Tiles       image.Rectangle
 	Zoom        int
 	Parallelism int
@@ -26,6 +27,10 @@ func (c *Config) TileCount() int {
 }
 
 func (c *Config) DetermineOffsetsByYear() {
+	if c.NoCrop {
+		return
+	}
+
 	newTiles := image.Rectangle{Min: c.Tiles.Min, Max: image.Point{X: DefaultFetchMax, Y: DefaultFetchMax}}
 	switch c.Year {
 	case 2013:

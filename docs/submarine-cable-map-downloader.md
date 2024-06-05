@@ -11,6 +11,7 @@ submarine-cable-map-downloader [flags]
 ```
       --format string         Tile format. Try png, png8, png24. (default detected)
   -h, --help                  help for submarine-cable-map-downloader
+      --no-crop               Download the entire square map instead of cropping
       --parallelism int       Number of goroutines to use (default 16)
       --tile-max-x int        X tile max (default determined by year) (default 63)
       --tile-max-y int        Y tile max (default determined by year) (default 63)
