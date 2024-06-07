@@ -90,7 +90,5 @@ func (d *Downloader) Do(ctx context.Context) (*image.NRGBA, error) {
 	if err := group.Wait(); err != nil {
 		return nil, err
 	}
-	_ = bar.Finish()
-
 	return img, nil
 }
