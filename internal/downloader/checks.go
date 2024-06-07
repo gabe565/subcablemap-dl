@@ -51,6 +51,7 @@ func (d *Downloader) FindFormat() error {
 			if err != nil || resp.StatusCode != http.StatusOK {
 				continue
 			}
+			_, _ = io.Copy(io.Discard, resp.Body)
 			_ = resp.Body.Close()
 
 			d.config.Format = v
