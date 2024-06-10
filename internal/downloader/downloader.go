@@ -7,6 +7,7 @@ import (
 	"image"
 	"image/draw"
 	"net/http"
+	"sync"
 
 	"github.com/gabe565/submarine-cable-map-downloader/internal/config"
 	"github.com/schollz/progressbar/v3"
@@ -26,11 +27,12 @@ type Downloader struct {
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
 func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
-	img := image.NewNRGBA(image.Rect(0, 0, d.config.OutputWidth(), d.config.OutputHeight()))
+	var img *image.NRGBA
 	tileChan := make(chan image.Point)
 	group, ctx := errgroup.WithContext(ctx)
 
 	bar := progressbar.Default(int64(d.config.TileCount()), "Creating mosaic")
+	var mu sync.RWMutex
 	for range d.config.Parallelism {
 		group.Go(func() error {
 			for tile := range tileChan {
@@ -53,6 +55,13 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 					return err
 				}
 				_ = resp.Body.Close()
+
+				mu.Lock()
+				if img == nil {
+					d.config.TileSize = tileData.Bounds().Max.X
+					img = image.NewNRGBA(image.Rect(0, 0, d.config.OutputWidth(), d.config.OutputHeight()))
+				}
+				mu.Unlock()
 
 				draw.Draw(img, d.config.TileRect(tile), tileData, image.Point{}, draw.Src)
 				_ = bar.Add(1)

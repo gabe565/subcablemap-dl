@@ -11,7 +11,6 @@ const (
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
 	cmd.Flags().IntVar(&c.Year, "year", c.Year, "Year to download (default latest available)")
-	cmd.Flags().IntVar(&c.TileSize, "tile-size", c.TileSize, "Tile size")
 	cmd.Flags().BoolVar(&c.NoCrop, "no-crop", c.NoCrop, "Download the entire square map instead of cropping")
 	cmd.Flags().IntVar(&c.Tiles.Min.X, "tile-min-x", c.Tiles.Min.X, "X tile min (default determined by year)")
 	cmd.Flags().IntVar(&c.Tiles.Max.X, "tile-max-x", c.Tiles.Max.X, "X tile max (default determined by year)")
