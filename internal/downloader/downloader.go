@@ -71,7 +71,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 				select {
 				case <-ctx.Done():
 					return ctx.Err()
-				case tileChan <- image.Point{X: x, Y: y}:
+				case tileChan <- image.Pt(x, y):
 				}
 			}
 		}
