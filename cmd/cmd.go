@@ -22,7 +22,7 @@ func New() *cobra.Command {
 		DisableAutoGenTag: true,
 	}
 
-	conf := &config.Config{}
+	conf := config.New()
 	conf.RegisterFlags(cmd)
 	cmd.SetContext(config.NewContext(context.Background(), conf))
 	return cmd

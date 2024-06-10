@@ -2,6 +2,12 @@ package config
 
 import "image"
 
+func New() *Config {
+	return &Config{
+		Zoom: 6,
+	}
+}
+
 type Config struct {
 	Year        int
 	TileSize    int
