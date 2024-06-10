@@ -26,7 +26,7 @@ type Downloader struct {
 
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
-func (d *Downloader) Do(ctx context.Context) (*image.NRGBA, error) {
+func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	img := image.NewNRGBA(image.Rect(0, 0, d.config.OutputWidth(), d.config.OutputHeight()))
 	tileChan := make(chan image.Point)
 	group, ctx := errgroup.WithContext(ctx)
@@ -86,8 +86,5 @@ func (d *Downloader) Do(ctx context.Context) (*image.NRGBA, error) {
 		return nil
 	})
 
-	if err := group.Wait(); err != nil {
-		return nil, err
-	}
-	return img, nil
+	return img, group.Wait()
 }
