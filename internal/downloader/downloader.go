@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"image"
 	"image/draw"
-	"log/slog"
 	"net/http"
 
 	"github.com/gabe565/submarine-cable-map-downloader/internal/config"
@@ -31,7 +30,6 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	tileChan := make(chan image.Point)
 	group, ctx := errgroup.WithContext(ctx)
 
-	slog.Info("Spawning downloaders", "count", d.config.Parallelism)
 	bar := progressbar.Default(int64(d.config.TileCount()), "Creating mosaic")
 	for range d.config.Parallelism {
 		group.Go(func() error {

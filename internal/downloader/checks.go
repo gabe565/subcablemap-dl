@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"log/slog"
 	"net/http"
 	"strconv"
 	"time"
@@ -55,7 +54,6 @@ func (d *Downloader) FindFormat() error {
 			_ = resp.Body.Close()
 
 			d.config.Format = v
-			slog.Info("Discovered format", "format", d.config.Format)
 		}
 		if d.config.Format == "" {
 			return ErrNoFormat
