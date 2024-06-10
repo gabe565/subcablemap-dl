@@ -36,6 +36,12 @@ func (c *Config) TileCount() int {
 	return diff.X * diff.Y
 }
 
+func (c *Config) TileRect(tile image.Point) image.Rectangle {
+	x := (tile.X - c.Tiles.Min.X) * c.TileSize
+	y := (tile.Y - c.Tiles.Min.Y) * c.TileSize
+	return image.Rect(x, y, x+c.TileSize, y+c.TileSize)
+}
+
 func (c *Config) DetermineOffsetsByYear() {
 	if c.NoCrop {
 		return

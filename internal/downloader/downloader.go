@@ -56,15 +56,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 				}
 				_ = resp.Body.Close()
 
-				pt := image.Point{
-					X: (tile.X - d.config.Tiles.Min.X) * d.config.TileSize,
-					Y: (tile.Y - d.config.Tiles.Min.Y) * d.config.TileSize,
-				}
-				r := image.Rectangle{
-					Min: pt,
-					Max: pt.Add(image.Point{X: d.config.TileSize, Y: d.config.TileSize}),
-				}
-				draw.Draw(img, r, tileData, image.Point{}, draw.Src)
+				draw.Draw(img, d.config.TileRect(tile), tileData, image.Point{}, draw.Src)
 				_ = bar.Add(1)
 			}
 
