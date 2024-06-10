@@ -4,7 +4,11 @@ import "image"
 
 func New() *Config {
 	return &Config{
-		Zoom: 6,
+		TileSize:    256,
+		Tiles:       image.Rect(DefaultFetchMin, DefaultFetchMin, DefaultFetchMax, DefaultFetchMax),
+		Zoom:        6,
+		Parallelism: 16,
+		URLTemplate: "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s",
 	}
 }
 
