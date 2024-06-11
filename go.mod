@@ -1,6 +1,6 @@
 module github.com/gabe565/submarine-cable-map-downloader
 
-go 1.22.3
+go 1.22.4
 
 require (
 	github.com/schollz/progressbar/v3 v3.14.3
