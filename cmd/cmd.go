@@ -77,7 +77,7 @@ func run(cmd *cobra.Command, args []string) error {
 	if err := png.Encode(io.MultiWriter(out, bar), img); err != nil {
 		return err
 	}
-	_, _ = io.WriteString(os.Stderr, "\n")
+	_ = bar.Exit()
 
 	slog.Info("Done", "path", path)
 	return out.Close()
