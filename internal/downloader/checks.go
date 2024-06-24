@@ -42,11 +42,16 @@ func (d *Downloader) CheckYear(ctx context.Context) error {
 
 var ErrNoFormat = errors.New("could not discover file format")
 
-func (d *Downloader) FindFormat() error {
+func (d *Downloader) FindFormat(ctx context.Context) error {
 	if d.config.Format == "" {
 		for _, v := range []string{"png", "png8", "png24"} {
-			//nolint:noctx
-			resp, err := http.Head(fmt.Sprintf(d.config.URLTemplate, d.config.Year, d.config.Zoom, 0, 0, v))
+			url := fmt.Sprintf(d.config.URLTemplate, d.config.Year, d.config.Zoom, 0, 0, v)
+			req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
+			if err != nil {
+				return err
+			}
+
+			resp, err := http.DefaultClient.Do(req)
 			if err != nil || resp.StatusCode != http.StatusOK {
 				continue
 			}
