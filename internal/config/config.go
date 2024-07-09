@@ -84,50 +84,42 @@ func (c *Config) DetermineOffsetsByYear() error {
 	newTiles := image.Rectangle{Min: c.Tiles.Min, Max: maxPoint}
 
 	if !c.NoCrop {
-		switch c.Year {
-		case 2013:
-			switch c.Zoom {
-			case 6:
+		switch c.Zoom {
+		case 6:
+			switch c.Year {
+			case 2013:
 				newTiles.Min.Y = 5
 				newTiles.Max.Y = 55
-			case 5:
-				newTiles.Min.Y = 2
-				newTiles.Max.Y = 27
-			case 4:
-				newTiles.Min.Y = 1
-				newTiles.Max.Y = 13
-			case 3:
-				newTiles.Max.Y = 6
-			}
-		case 2020:
-			switch c.Zoom {
-			case 6:
+			case 2020:
 				newTiles.Min.Y = 7
 				newTiles.Max.Y = 54
-			case 5:
-				newTiles.Min.Y = 3
-				newTiles.Max.Y = 27
-			case 4:
-				newTiles.Min.Y = 2
-				newTiles.Max.Y = 13
-			case 3:
-				newTiles.Min.Y = 1
-				newTiles.Max.Y = 6
-			}
-		case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
-			switch c.Zoom {
-			case 6:
+			case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
 				newTiles.Min.Y = 8
 				newTiles.Max.Y = 55
-			case 5:
-				newTiles.Min.Y = 4
-				newTiles.Max.Y = 27
-			case 4:
+			}
+		case 5:
+			newTiles.Max.Y = 27
+			switch c.Year {
+			case 2013:
 				newTiles.Min.Y = 2
-				newTiles.Max.Y = 13
-			case 3:
+			case 2020:
+				newTiles.Min.Y = 3
+			case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
+				newTiles.Min.Y = 4
+			}
+		case 4:
+			newTiles.Max.Y = 13
+			switch c.Year {
+			case 2013:
 				newTiles.Min.Y = 1
-				newTiles.Max.Y = 6
+			case 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024:
+				newTiles.Min.Y = 2
+			}
+		case 3:
+			newTiles.Max.Y = 6
+			switch c.Year {
+			case 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024:
+				newTiles.Min.Y = 1
 			}
 		}
 	}
