@@ -3,6 +3,7 @@ module github.com/gabe565/submarine-cable-map-downloader
 go 1.22.5
 
 require (
+	github.com/disintegration/gift v1.2.1
 	github.com/schollz/progressbar/v3 v3.14.4
 	github.com/spf13/cobra v1.8.1
 	golang.org/x/sync v0.7.0
