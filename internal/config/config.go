@@ -93,7 +93,7 @@ func (c *Config) DetermineOffsetsByYear() error {
 			case 2020:
 				newTiles.Min.Y = 7
 				newTiles.Max.Y = 54
-			case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
+			default:
 				newTiles.Min.Y = 8
 				newTiles.Max.Y = 55
 			}
@@ -104,7 +104,7 @@ func (c *Config) DetermineOffsetsByYear() error {
 				newTiles.Min.Y = 2
 			case 2020:
 				newTiles.Min.Y = 3
-			case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
+			default:
 				newTiles.Min.Y = 4
 			}
 		case 4:
@@ -112,13 +112,14 @@ func (c *Config) DetermineOffsetsByYear() error {
 			switch c.Year {
 			case 2013:
 				newTiles.Min.Y = 1
-			case 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024:
+			default:
 				newTiles.Min.Y = 2
 			}
 		case 3:
 			newTiles.Max.Y = 6
 			switch c.Year {
-			case 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024:
+			case 2013:
+			default:
 				newTiles.Min.Y = 1
 			}
 		}
