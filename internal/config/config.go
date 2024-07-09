@@ -71,6 +71,11 @@ func (c *Config) TileRect(tile image.Point) image.Rectangle {
 	return image.Rect(x, y, x+c.TileSize, y+c.TileSize)
 }
 
+var (
+	ErrMaxXTooLarge = errors.New("tile max x exceeds zoom level")
+	ErrMaxYTooLarge = errors.New("tile max y exceeds zoom level")
+)
+
 func (c *Config) DetermineOffsetsByYear() error {
 	maxPoint, err := c.MaxForZoom()
 	if err != nil {
@@ -140,5 +145,11 @@ func (c *Config) DetermineOffsetsByYear() error {
 		c.Tiles.Max.Y = newTiles.Max.Y
 	}
 
+	if c.Tiles.Max.X > maxPoint.X {
+		return ErrMaxXTooLarge
+	}
+	if c.Tiles.Max.Y > maxPoint.Y {
+		return ErrMaxYTooLarge
+	}
 	return nil
 }
