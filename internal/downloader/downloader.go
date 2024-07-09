@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"image"
 	"image/draw"
+	"image/png"
 	"net/http"
 	"sync"
 
@@ -58,7 +59,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 					return fmt.Errorf("%w from %s: %s", ErrUnexpectedResponse, url, resp.Status)
 				}
 
-				tileData, _, err := image.Decode(resp.Body)
+				tileData, err := png.Decode(resp.Body)
 				if err != nil {
 					return err
 				}
