@@ -19,5 +19,6 @@ submarine-cable-map-downloader [path] [flags]
       --tile-min-y int        Y tile min (default determined by year)
       --url-template string   URL template. Variables are: year, zoom, x, y, format. (default "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s")
       --year int              Year to download (default latest available)
+      --zoom int              Zoom level (default 6)
 ```
 
