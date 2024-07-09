@@ -36,16 +36,7 @@ func run(cmd *cobra.Command, args []string) error {
 		panic("Config not added to context")
 	}
 
-	dl := downloader.New(conf)
-
-	if err := dl.CheckYear(cmd.Context()); err != nil {
-		return err
-	}
 	if err := conf.DetermineOffsetsByYear(); err != nil {
-		return err
-	}
-
-	if err := dl.FindFormat(cmd.Context()); err != nil {
 		return err
 	}
 
@@ -56,7 +47,7 @@ func run(cmd *cobra.Command, args []string) error {
 		"workers", conf.Parallelism,
 	)
 
-	img, err := dl.Do(cmd.Context())
+	img, err := downloader.New(conf).Do(cmd.Context())
 	if err != nil {
 		return err
 	}

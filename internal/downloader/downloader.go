@@ -27,6 +27,14 @@ type Downloader struct {
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
 func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
+	if err := d.CheckYear(ctx); err != nil {
+		return nil, err
+	}
+
+	if err := d.FindFormat(ctx); err != nil {
+		return nil, err
+	}
+
 	var img *image.NRGBA
 	tileChan := make(chan image.Point)
 	group, ctx := errgroup.WithContext(ctx)
