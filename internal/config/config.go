@@ -1,11 +1,14 @@
 package config
 
-import "image"
+import (
+	"errors"
+	"fmt"
+	"image"
+)
 
 func New() *Config {
 	return &Config{
 		TileSize:    256,
-		Tiles:       image.Rect(DefaultFetchMin, DefaultFetchMin, DefaultFetchMax, DefaultFetchMax),
 		Zoom:        6,
 		Parallelism: 16,
 		URLTemplate: "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s",
@@ -36,42 +39,106 @@ func (c *Config) TileCount() int {
 	return diff.X * diff.Y
 }
 
+var ErrInvalidZoom = errors.New("invalid zoom")
+
+const (
+	Zoom6Max = 63
+	Zoom5Max = 31
+	Zoom4Max = 15
+	Zoom3Max = 7
+	Zoom2Max = 3
+)
+
+func (c *Config) MaxForZoom() (image.Point, error) {
+	switch c.Zoom {
+	case 6:
+		return image.Pt(Zoom6Max, Zoom6Max), nil
+	case 5:
+		return image.Pt(Zoom5Max, Zoom5Max), nil
+	case 4:
+		return image.Pt(Zoom4Max, Zoom4Max), nil
+	case 3:
+		return image.Pt(Zoom3Max, Zoom3Max), nil
+	case 2:
+		return image.Pt(Zoom2Max, Zoom2Max), nil
+	}
+	return image.Point{}, fmt.Errorf("%w: %d", ErrInvalidZoom, c.Zoom)
+}
+
 func (c *Config) TileRect(tile image.Point) image.Rectangle {
 	x := (tile.X - c.Tiles.Min.X) * c.TileSize
 	y := (tile.Y - c.Tiles.Min.Y) * c.TileSize
 	return image.Rect(x, y, x+c.TileSize, y+c.TileSize)
 }
 
-func (c *Config) DetermineOffsetsByYear() {
-	if c.NoCrop {
-		return
+func (c *Config) DetermineOffsetsByYear() error {
+	maxPoint, err := c.MaxForZoom()
+	if err != nil {
+		return err
+	}
+	newTiles := image.Rectangle{Min: c.Tiles.Min, Max: maxPoint}
+
+	if !c.NoCrop {
+		switch c.Year {
+		case 2013:
+			switch c.Zoom {
+			case 6:
+				newTiles.Min.Y = 5
+				newTiles.Max.Y = 55
+			case 5:
+				newTiles.Min.Y = 2
+				newTiles.Max.Y = 27
+			case 4:
+				newTiles.Min.Y = 1
+				newTiles.Max.Y = 13
+			case 3:
+				newTiles.Max.Y = 6
+			}
+		case 2020:
+			switch c.Zoom {
+			case 6:
+				newTiles.Min.Y = 7
+				newTiles.Max.Y = 54
+			case 5:
+				newTiles.Min.Y = 3
+				newTiles.Max.Y = 27
+			case 4:
+				newTiles.Min.Y = 2
+				newTiles.Max.Y = 13
+			case 3:
+				newTiles.Min.Y = 1
+				newTiles.Max.Y = 6
+			}
+		case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
+			switch c.Zoom {
+			case 6:
+				newTiles.Min.Y = 8
+				newTiles.Max.Y = 55
+			case 5:
+				newTiles.Min.Y = 4
+				newTiles.Max.Y = 27
+			case 4:
+				newTiles.Min.Y = 2
+				newTiles.Max.Y = 13
+			case 3:
+				newTiles.Min.Y = 1
+				newTiles.Max.Y = 6
+			}
+		}
 	}
 
-	newTiles := image.Rectangle{Min: c.Tiles.Min, Max: image.Point{X: DefaultFetchMax, Y: DefaultFetchMax}}
-	switch c.Year {
-	case 2013:
-		newTiles.Min.Y = 5
-		newTiles.Max.Y = 55
-	case 2020:
-		newTiles.Min.Y = 7
-		newTiles.Max.Y = 54
-	case 2014, 2015, 2016, 2017, 2018, 2019, 2021, 2022, 2023, 2024:
-		newTiles.Min.Y = 8
-		newTiles.Max.Y = 55
-	default:
-		return
-	}
-
-	if c.Tiles.Min.X == DefaultFetchMin {
+	if c.Tiles.Min.X == 0 {
 		c.Tiles.Min.X = newTiles.Min.X
 	}
-	if c.Tiles.Min.Y == DefaultFetchMin {
+	if c.Tiles.Min.Y == 0 {
 		c.Tiles.Min.Y = newTiles.Min.Y
 	}
-	if c.Tiles.Max.X == DefaultFetchMax {
+	if c.Tiles.Max.X == 0 {
 		c.Tiles.Max.X = newTiles.Max.X
 	}
-	if c.Tiles.Max.Y == DefaultFetchMax {
+	if c.Tiles.Max.Y == 0 {
 		c.Tiles.Max.Y = newTiles.Max.Y
 	}
+
+	return nil
 }

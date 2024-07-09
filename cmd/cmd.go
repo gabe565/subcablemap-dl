@@ -41,7 +41,9 @@ func run(cmd *cobra.Command, args []string) error {
 	if err := dl.CheckYear(cmd.Context()); err != nil {
 		return err
 	}
-	conf.DetermineOffsetsByYear()
+	if err := conf.DetermineOffsetsByYear(); err != nil {
+		return err
+	}
 
 	if err := dl.FindFormat(cmd.Context()); err != nil {
 		return err
