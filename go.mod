@@ -1,6 +1,6 @@
 module github.com/gabe565/submarine-cable-map-downloader
 
-go 1.22.5
+go 1.22.6
 
 require (
 	github.com/disintegration/gift v1.2.1
