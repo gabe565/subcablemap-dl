@@ -1,6 +1,8 @@
 package config
 
 import (
+	"strings"
+
 	"github.com/spf13/cobra"
 )
 
@@ -14,5 +16,6 @@ func (c *Config) RegisterFlags(cmd *cobra.Command) {
 	cmd.Flags().IntVar(&c.Zoom, "zoom", c.Zoom, "Zoom level")
 	cmd.Flags().IntVar(&c.Parallelism, "parallelism", c.Parallelism, "Number of goroutines to use")
 	cmd.Flags().StringVar(&c.Format, "format", c.Format, "Tile format. Try png, png8, png24. (default detected)")
+	cmd.Flags().Var(&c.Compression, "compression", "PNG compression level (one of "+strings.Join(CompressionLevelStrings(), ", ")+")")
 	cmd.Flags().StringVar(&c.URLTemplate, "url-template", c.URLTemplate, "URL template. Variables are: year, zoom, x, y, format.")
 }

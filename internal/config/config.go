@@ -24,6 +24,7 @@ type Config struct {
 	Parallelism int
 	URLTemplate string
 	Format      string
+	Compression CompressionLevel
 }
 
 func (c *Config) OutputWidth() int {

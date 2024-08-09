@@ -9,6 +9,7 @@ submarine-cable-map-downloader [path] [flags]
 ### Options
 
 ```
+      --compression string    PNG compression level (one of default, none, fast, best) (default "default")
       --format string         Tile format. Try png, png8, png24. (default detected)
   -h, --help                  help for submarine-cable-map-downloader
       --no-crop               Download the entire square map instead of cropping
