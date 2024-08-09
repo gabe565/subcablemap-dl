@@ -19,6 +19,7 @@ func New() *cobra.Command {
 		Use:  "submarine-cable-map-downloader [path]",
 		RunE: run,
 
+		SilenceErrors:     true,
 		DisableAutoGenTag: true,
 	}
 
@@ -30,6 +31,8 @@ func New() *cobra.Command {
 
 func run(cmd *cobra.Command, args []string) error {
 	cmd.SilenceUsage = true
+
+	config.InitLog()
 
 	conf, ok := config.FromContext(cmd.Context())
 	if !ok {
