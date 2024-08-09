@@ -68,6 +68,10 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 	_ = bar.Exit()
 
+	if err := out.Close(); err != nil {
+		return err
+	}
+
 	slog.Info("Done", "path", path)
-	return out.Close()
+	return nil
 }
