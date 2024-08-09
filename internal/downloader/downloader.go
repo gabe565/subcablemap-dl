@@ -41,7 +41,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	group, ctx := errgroup.WithContext(ctx)
 
 	bar := progressbar.Default(int64(d.config.TileCount()), "Creating mosaic")
-	var mu sync.RWMutex
+	var mu sync.Mutex
 	for range d.config.Parallelism {
 		group.Go(func() error {
 			for tile := range tileChan {
