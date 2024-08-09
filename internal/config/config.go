@@ -11,7 +11,6 @@ func New() *Config {
 		TileSize:    256,
 		Zoom:        6,
 		Parallelism: 16,
-		URLTemplate: "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s",
 	}
 }
 
@@ -22,7 +21,6 @@ type Config struct {
 	Tiles       image.Rectangle
 	Zoom        int
 	Parallelism int
-	URLTemplate string
 	Format      string
 	Compression CompressionLevel
 }

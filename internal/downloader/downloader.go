@@ -28,6 +28,8 @@ type Downloader struct {
 
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
+const URLTemplate = "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s"
+
 func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	if err := d.CheckYear(ctx); err != nil {
 		return nil, err
@@ -53,7 +55,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	for range d.config.Parallelism {
 		group.Go(func() error {
 			for tile := range tileChan {
-				url := fmt.Sprintf(d.config.URLTemplate, d.config.Year, d.config.Zoom, tile.X, tile.Y, d.config.Format)
+				url := fmt.Sprintf(URLTemplate, d.config.Year, d.config.Zoom, tile.X, tile.Y, d.config.Format)
 				req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 				if err != nil {
 					return err

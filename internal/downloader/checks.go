@@ -45,7 +45,7 @@ var ErrNoFormat = errors.New("could not discover file format")
 func (d *Downloader) FindFormat(ctx context.Context) error {
 	if d.config.Format == "" {
 		for _, v := range []string{"png", "png8", "png24"} {
-			url := fmt.Sprintf(d.config.URLTemplate, d.config.Year, d.config.Zoom, 0, 0, v)
+			url := fmt.Sprintf(URLTemplate, d.config.Year, d.config.Zoom, 0, 0, v)
 			req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
 			if err != nil {
 				return err

@@ -17,5 +17,4 @@ func (c *Config) RegisterFlags(cmd *cobra.Command) {
 	cmd.Flags().IntVarP(&c.Parallelism, "parallelism", "p", c.Parallelism, "Number of goroutines to use")
 	cmd.Flags().StringVarP(&c.Format, "format", "f", c.Format, "Tile format. Try png, png8, png24. (default detected)")
 	cmd.Flags().VarP(&c.Compression, "compression", "c", "PNG compression level (one of "+strings.Join(CompressionLevelStrings(), ", ")+")")
-	cmd.Flags().StringVar(&c.URLTemplate, "url-template", c.URLTemplate, "URL template. Variables are: year, zoom, x, y, format.")
 }
