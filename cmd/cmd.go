@@ -40,13 +40,6 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	slog.Info("Starting download",
-		"year", conf.Year,
-		"tiles", conf.TileCount(),
-		"tile_offsets", conf.Tiles,
-		"workers", conf.Parallelism,
-	)
-
 	img, err := downloader.New(conf).Do(cmd.Context())
 	if err != nil {
 		return err

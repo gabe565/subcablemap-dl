@@ -7,6 +7,7 @@ import (
 	"image"
 	"image/draw"
 	"image/png"
+	"log/slog"
 	"net/http"
 	"sync"
 
@@ -35,6 +36,13 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	if err := d.FindFormat(ctx); err != nil {
 		return nil, err
 	}
+
+	slog.Info("Starting download",
+		"year", d.config.Year,
+		"tiles", d.config.TileCount(),
+		"tile_offsets", d.config.Tiles,
+		"workers", d.config.Parallelism,
+	)
 
 	var img *image.NRGBA
 	tileChan := make(chan image.Point)
