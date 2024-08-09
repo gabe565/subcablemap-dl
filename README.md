@@ -12,4 +12,10 @@ go install github.com/gabe565/submarine-cable-map-downloader@latest
 
 ## Usage
 
-See [docs](./docs/submarine-cable-map-downloader.md)
+To download the 2024 map, run
+```shell
+submarine-cable-map-downloader --year=2024
+```
+When done, the map will be available at `submarine-cable-map-2024.png`.
+
+For full command-line reference, see [docs](./docs/submarine-cable-map-downloader.md).
