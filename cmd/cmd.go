@@ -16,12 +16,15 @@ import (
 
 func New() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "submarine-cable-map-downloader [path]",
-		RunE: run,
+		Use:     "submarine-cable-map-downloader [path]",
+		RunE:    run,
+		Version: buildVersion(),
 
 		SilenceErrors:     true,
 		DisableAutoGenTag: true,
 	}
+	cmd.SetVersionTemplate(`{{with .Name}}{{printf "%s " .}}{{end}}{{printf "commit %s" .Version}}
+`)
 
 	conf := config.New()
 	conf.RegisterFlags(cmd)
