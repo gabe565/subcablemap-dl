@@ -47,14 +47,16 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	)
 
 	var img *image.NRGBA
-	tileChan := make(chan image.Point)
 	group, ctx := errgroup.WithContext(ctx)
-
+	group.SetLimit(d.config.Parallelism)
 	bar := progressbar.Default(int64(d.config.TileCount()), "Creating mosaic")
 	var mu sync.Mutex
-	for range d.config.Parallelism {
-		group.Go(func() error {
-			for tile := range tileChan {
+
+	for x := d.config.Tiles.Min.X; x <= d.config.Tiles.Max.X; x++ {
+		for y := d.config.Tiles.Min.Y; y <= d.config.Tiles.Max.Y; y++ {
+			group.Go(func() error {
+				tile := image.Pt(x, y)
+
 				url := fmt.Sprintf(URLTemplate, d.config.Year, d.config.Zoom, tile.X, tile.Y, d.config.Format)
 				req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 				if err != nil {
@@ -65,6 +67,10 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 				if err != nil {
 					return err
 				}
+				defer func() {
+					_ = resp.Body.Close()
+				}()
+
 				if resp.StatusCode != http.StatusOK {
 					return fmt.Errorf("%w from %s: %s", ErrUnexpectedResponse, url, resp.Status)
 				}
@@ -73,7 +79,6 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 				if err != nil {
 					return err
 				}
-				_ = resp.Body.Close()
 
 				mu.Lock()
 				if img == nil {
@@ -84,25 +89,11 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 
 				draw.Draw(img, d.config.TileRect(tile), tileData, image.Point{}, draw.Src)
 				_ = bar.Add(1)
-			}
-
-			return nil
-		})
+				return nil
+			})
+		}
 	}
 
-	group.Go(func() error {
-		defer close(tileChan)
-		for x := d.config.Tiles.Min.X; x <= d.config.Tiles.Max.X; x++ {
-			for y := d.config.Tiles.Min.Y; y <= d.config.Tiles.Max.Y; y++ {
-				select {
-				case <-ctx.Done():
-					return ctx.Err()
-				case tileChan <- image.Pt(x, y):
-				}
-			}
-		}
-		return nil
-	})
-
-	return img, group.Wait()
+	err := group.Wait()
+	return img, err
 }
