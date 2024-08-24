@@ -56,7 +56,7 @@ func run(cmd *cobra.Command, args []string) error {
 		path = args[0]
 	}
 
-	slog.Info("Creating file", "path", path)
+	slog.Info("Creating file", "path", path, "dimensions", img.Bounds().Max)
 	out, err := os.Create(path)
 	if err != nil {
 		return err
