@@ -3,4 +3,5 @@
 .DS_Store
 .idea/
 /completions/
+/manpages/
 subcablemap-dl
