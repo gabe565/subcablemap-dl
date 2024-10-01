@@ -18,14 +18,17 @@ func New(options ...Option) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "subcablemap-dl [path]",
 		Short: "Download full-resolution versions of Telegeography Submarine Cable Maps",
+		Args:  cobra.MaximumNArgs(1),
 		RunE:  run,
 
+		ValidArgsFunction: validArgs,
 		SilenceErrors:     true,
 		DisableAutoGenTag: true,
 	}
 
 	conf := config.New()
 	conf.RegisterFlags(cmd)
+	conf.RegisterCompletions(cmd)
 	cmd.SetContext(config.NewContext(context.Background(), conf))
 
 	for _, option := range options {
@@ -33,6 +36,13 @@ func New(options ...Option) *cobra.Command {
 	}
 
 	return cmd
+}
+
+func validArgs(_ *cobra.Command, args []string, _ string) ([]string, cobra.ShellCompDirective) {
+	if len(args) == 0 {
+		return []string{"png"}, cobra.ShellCompDirectiveFilterFileExt
+	}
+	return nil, cobra.ShellCompDirectiveNoFileComp
 }
 
 func run(cmd *cobra.Command, args []string) error {
