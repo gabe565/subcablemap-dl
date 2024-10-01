@@ -42,6 +42,10 @@ func run(cmd *cobra.Command, args []string) error {
 		panic("Config not added to context")
 	}
 
+	if conf.Completion != "" {
+		return completion(cmd)
+	}
+
 	if err := conf.DetermineOffsetsByYear(); err != nil {
 		return err
 	}

@@ -15,6 +15,7 @@ func New() *Config {
 }
 
 type Config struct {
+	Completion  string
 	Year        int
 	TileSize    int
 	NoCrop      bool
