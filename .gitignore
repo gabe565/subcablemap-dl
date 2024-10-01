@@ -1,5 +1,6 @@
-*.png
 *.jpg
+*.png
 .DS_Store
 .idea/
+/completions/
 subcablemap-dl
