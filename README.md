@@ -1,4 +1,7 @@
 # Submarine Cable Map Downloader
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/gabe565/subcablemap-dl)](https://github.com/gabe565/subcablemap-dl/releases)
+[![Build](https://github.com/gabe565/subcablemap-dl/actions/workflows/build.yaml/badge.svg)](https://github.com/gabe565/subcablemap-dl/actions/workflows/build.yaml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/gabe565/subcablemap-dl)](https://goreportcard.com/report/github.com/gabe565/subcablemap-dl)
 
 Downloads and combines all tiles for the [Telegeography Submarine Cable Map](https://submarine-cable-map-2024.telegeography.com/) to create a full-resolution image. All maps since 2013 are supported.
 
