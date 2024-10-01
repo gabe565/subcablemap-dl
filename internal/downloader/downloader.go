@@ -50,7 +50,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 	group, ctx := errgroup.WithContext(ctx)
 	group.SetLimit(d.config.Parallelism)
 	bar := progressbar.Default(int64(d.config.TileCount()), "Creating mosaic")
-	var mu sync.Mutex
+	var once sync.Once
 
 	for x := d.config.Tiles.Min.X; x <= d.config.Tiles.Max.X; x++ {
 		for y := d.config.Tiles.Min.Y; y <= d.config.Tiles.Max.Y; y++ {
@@ -80,12 +80,10 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 					return err
 				}
 
-				mu.Lock()
-				if img == nil {
+				once.Do(func() {
 					d.config.TileSize = tileData.Bounds().Max.X
 					img = image.NewNRGBA(image.Rect(0, 0, d.config.OutputWidth(), d.config.OutputHeight()))
-				}
-				mu.Unlock()
+				})
 
 				draw.Draw(img, d.config.TileRect(tile), tileData, image.Point{}, draw.Src)
 				_ = bar.Add(1)
