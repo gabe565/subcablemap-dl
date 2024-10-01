@@ -11,7 +11,7 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/gabe565/submarine-cable-map-downloader/internal/config"
+	"github.com/gabe565/subcablemap-dl/internal/config"
 	"github.com/schollz/progressbar/v3"
 	"golang.org/x/sync/errgroup"
 )

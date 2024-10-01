@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/gabe565/submarine-cable-map-downloader/cmd"
+	"github.com/gabe565/subcablemap-dl/cmd"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/gabe565/submarine-cable-map-downloader
+module github.com/gabe565/subcablemap-dl
 
 go 1.23.1
 

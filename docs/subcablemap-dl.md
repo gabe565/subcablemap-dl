@@ -1,9 +1,9 @@
-## submarine-cable-map-downloader
+## subcablemap-dl
 
 
 
 ```
-submarine-cable-map-downloader [path] [flags]
+subcablemap-dl [path] [flags]
 ```
 
 ### Options
@@ -11,7 +11,7 @@ submarine-cable-map-downloader [path] [flags]
 ```
   -c, --compression string   PNG compression level (one of default, none, fast, best) (default "default")
   -f, --format string        Tile format. Try png, png8, png24. (default detected)
-  -h, --help                 help for submarine-cable-map-downloader
+  -h, --help                 help for subcablemap-dl
   -n, --no-crop              Download the entire square map instead of cropping
   -p, --parallelism int      Number of goroutines to use (default 16)
       --tile-max-x int       X tile max (default determined by year and zoom)

@@ -8,15 +8,15 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/gabe565/submarine-cable-map-downloader/internal/config"
-	"github.com/gabe565/submarine-cable-map-downloader/internal/downloader"
+	"github.com/gabe565/subcablemap-dl/internal/config"
+	"github.com/gabe565/subcablemap-dl/internal/downloader"
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 )
 
 func New() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "submarine-cable-map-downloader [path]",
+		Use:     "subcablemap-dl [path]",
 		RunE:    run,
 		Version: buildVersion(),
 
