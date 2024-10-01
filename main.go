@@ -7,8 +7,11 @@ import (
 	"github.com/gabe565/subcablemap-dl/cmd"
 )
 
+var version = "beta"
+
 func main() {
-	if err := cmd.New().Execute(); err != nil {
+	root := cmd.New(cmd.WithVersion(version))
+	if err := root.Execute(); err != nil {
 		slog.Error(err.Error())
 		os.Exit(1)
 	}

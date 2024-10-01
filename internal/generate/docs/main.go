@@ -17,7 +17,7 @@ func main() {
 		panic(err)
 	}
 
-	root := cmd.New()
+	root := cmd.New(cmd.WithVersion("beta"))
 	if err := doc.GenMarkdownTree(root, output); err != nil {
 		panic(err)
 	}

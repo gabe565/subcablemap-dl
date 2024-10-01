@@ -14,22 +14,24 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func New() *cobra.Command {
+func New(options ...Option) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "subcablemap-dl [path]",
-		Short:   "Download full-resolution versions of Telegeography Submarine Cable Maps",
-		RunE:    run,
-		Version: buildVersion(),
+		Use:   "subcablemap-dl [path]",
+		Short: "Download full-resolution versions of Telegeography Submarine Cable Maps",
+		RunE:  run,
 
 		SilenceErrors:     true,
 		DisableAutoGenTag: true,
 	}
-	cmd.SetVersionTemplate(`{{with .Name}}{{printf "%s " .}}{{end}}{{printf "commit %s" .Version}}
-`)
 
 	conf := config.New()
 	conf.RegisterFlags(cmd)
 	cmd.SetContext(config.NewContext(context.Background(), conf))
+
+	for _, option := range options {
+		option(cmd)
+	}
+
 	return cmd
 }
 

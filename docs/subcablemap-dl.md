@@ -19,6 +19,7 @@ subcablemap-dl [path] [flags]
       --tile-max-y int       Y tile max (default determined by year and zoom)
       --tile-min-x int       X tile min (default determined by year and zoom)
       --tile-min-y int       Y tile min (default determined by year and zoom)
+  -v, --version              version for subcablemap-dl
   -y, --year int             Year to download (default latest available)
   -z, --zoom int             Zoom level (default 6)
 ```
