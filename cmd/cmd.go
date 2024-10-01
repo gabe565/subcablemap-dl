@@ -17,6 +17,7 @@ import (
 func New() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "subcablemap-dl [path]",
+		Short:   "Download full-resolution versions of Telegeography Submarine Cable Maps",
 		RunE:    run,
 		Version: buildVersion(),
 

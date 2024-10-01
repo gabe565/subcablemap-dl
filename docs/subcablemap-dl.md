@@ -1,6 +1,6 @@
 ## subcablemap-dl
 
-
+Download full-resolution versions of Telegeography Submarine Cable Maps
 
 ```
 subcablemap-dl [path] [flags]
