@@ -1,6 +1,6 @@
 module github.com/gabe565/submarine-cable-map-downloader
 
-go 1.23.0
+go 1.23.1
 
 require (
 	github.com/charmbracelet/log v0.4.0
