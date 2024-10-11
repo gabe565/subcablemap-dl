@@ -6,7 +6,7 @@ require (
 	github.com/charmbracelet/log v0.4.0
 	github.com/disintegration/gift v1.2.1
 	github.com/dmarkham/enumer v1.5.10
-	github.com/schollz/progressbar/v3 v3.16.0
+	github.com/schollz/progressbar/v3 v3.16.1
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/sync v0.8.0
