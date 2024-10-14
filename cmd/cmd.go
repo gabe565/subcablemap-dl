@@ -8,8 +8,8 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/gabe565/subcablemap-dl/internal/config"
-	"github.com/gabe565/subcablemap-dl/internal/downloader"
+	"gabe565.com/subcablemap-dl/internal/config"
+	"gabe565.com/subcablemap-dl/internal/downloader"
 	"github.com/schollz/progressbar/v3"
 	"github.com/spf13/cobra"
 )

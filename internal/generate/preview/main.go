@@ -7,9 +7,9 @@ import (
 	"log/slog"
 	"os"
 
+	"gabe565.com/subcablemap-dl/internal/config"
+	"gabe565.com/subcablemap-dl/internal/downloader"
 	"github.com/disintegration/gift"
-	"github.com/gabe565/subcablemap-dl/internal/config"
-	"github.com/gabe565/subcablemap-dl/internal/downloader"
 )
 
 func main() {

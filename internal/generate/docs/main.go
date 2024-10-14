@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/gabe565/subcablemap-dl/cmd"
+	"gabe565.com/subcablemap-dl/cmd"
 	"github.com/spf13/cobra/doc"
 )
 

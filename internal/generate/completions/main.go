@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/gabe565/subcablemap-dl/cmd"
-	"github.com/gabe565/subcablemap-dl/internal/config"
+	"gabe565.com/subcablemap-dl/cmd"
+	"gabe565.com/subcablemap-dl/internal/config"
 	flag "github.com/spf13/pflag"
 )
 

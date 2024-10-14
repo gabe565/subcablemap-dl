@@ -1,4 +1,4 @@
-module github.com/gabe565/subcablemap-dl
+module gabe565.com/subcablemap-dl
 
 go 1.23.1
 

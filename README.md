@@ -105,7 +105,7 @@ A binary is built for each release. You can either download one of these pre-bui
 
 #### Local Go Build
 ```shell
-go install github.com/gabe565/subcablemap-dl@latest
+go install gabe565.com/subcablemap-dl@latest
 ```
 
 </details>

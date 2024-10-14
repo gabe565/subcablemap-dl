@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/gabe565/subcablemap-dl/internal/config"
+	"gabe565.com/subcablemap-dl/internal/config"
 	"github.com/spf13/cobra"
 )
 
