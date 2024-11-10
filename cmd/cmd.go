@@ -48,19 +48,13 @@ func validArgs(_ *cobra.Command, args []string, _ string) ([]string, cobra.Shell
 func run(cmd *cobra.Command, args []string) error {
 	cmd.SilenceUsage = true
 
-	config.InitLog()
-
-	conf, ok := config.FromContext(cmd.Context())
-	if !ok {
-		panic("Config not added to context")
+	conf, err := config.Load(cmd.Context(), cmd)
+	if err != nil {
+		return err
 	}
 
 	if conf.Completion != "" {
 		return completion(cmd)
-	}
-
-	if err := conf.DetermineOffsetsByYear(); err != nil {
-		return err
 	}
 
 	img, err := downloader.New(conf).Do(cmd.Context())

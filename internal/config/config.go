@@ -1,9 +1,14 @@
 package config
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"image"
+	"io"
+	"net/http"
+	"strconv"
+	"time"
 )
 
 func New() *Config {
@@ -143,6 +148,65 @@ func (c *Config) DetermineOffsetsByYear() error {
 	}
 	if c.Tiles.Max.Y > maxPoint.Y {
 		return ErrMaxYTooLarge
+	}
+	return nil
+}
+
+var ErrMissingYear = errors.New("could not find year")
+
+func (c *Config) CheckYear(ctx context.Context) error {
+	var latest bool
+	if c.Year == 0 {
+		latest = true
+		c.Year = time.Now().Year()
+	}
+
+	url := "https://submarine-cable-map-" + strconv.Itoa(c.Year) + ".telegeography.com"
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil || resp.StatusCode != http.StatusOK {
+		if latest {
+			c.Year--
+			return c.CheckYear(ctx)
+		}
+		return fmt.Errorf("%w: %d", ErrMissingYear, c.Year)
+	}
+	_, _ = io.Copy(io.Discard, resp.Body)
+	_ = resp.Body.Close()
+
+	return nil
+}
+
+const URLTemplate = "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s"
+
+var ErrNoFormat = errors.New("could not discover file format")
+
+func (c *Config) FindFormat(ctx context.Context) error {
+	if c.Format == "" {
+		for _, v := range []string{"png", "png8", "png24"} {
+			url := fmt.Sprintf(URLTemplate, c.Year, c.Zoom, 0, 0, v)
+			req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
+			if err != nil {
+				return err
+			}
+
+			resp, err := http.DefaultClient.Do(req)
+			if err != nil || resp.StatusCode != http.StatusOK {
+				continue
+			}
+			_, _ = io.Copy(io.Discard, resp.Body)
+			_ = resp.Body.Close()
+
+			c.Format = v
+		}
+		if c.Format == "" {
+			return ErrNoFormat
+		}
 	}
 	return nil
 }

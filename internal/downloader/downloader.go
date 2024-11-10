@@ -28,17 +28,7 @@ type Downloader struct {
 
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
-const URLTemplate = "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s"
-
 func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
-	if err := d.CheckYear(ctx); err != nil {
-		return nil, err
-	}
-
-	if err := d.FindFormat(ctx); err != nil {
-		return nil, err
-	}
-
 	slog.Info("Starting download",
 		"year", d.config.Year,
 		"tiles", d.config.TileCount(),
@@ -57,7 +47,7 @@ func (d *Downloader) Do(ctx context.Context) (image.Image, error) {
 			group.Go(func() error {
 				tile := image.Pt(x, y)
 
-				url := fmt.Sprintf(URLTemplate, d.config.Year, d.config.Zoom, tile.X, tile.Y, d.config.Format)
+				url := fmt.Sprintf(config.URLTemplate, d.config.Year, d.config.Zoom, tile.X, tile.Y, d.config.Format)
 				req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 				if err != nil {
 					return err
