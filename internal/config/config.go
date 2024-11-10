@@ -32,26 +32,25 @@ type Config struct {
 }
 
 func (c *Config) OutputWidth() int {
-	return (c.Tiles.Max.X - c.Tiles.Min.X + 1) * c.TileSize
+	return (c.Tiles.Max.X - c.Tiles.Min.X) * c.TileSize
 }
 
 func (c *Config) OutputHeight() int {
-	return (c.Tiles.Max.Y - c.Tiles.Min.Y + 1) * c.TileSize
+	return (c.Tiles.Max.Y - c.Tiles.Min.Y) * c.TileSize
 }
 
 func (c *Config) TileCount() int {
-	diff := c.Tiles.Max.Sub(c.Tiles.Min).Add(image.Point{X: 1, Y: 1})
-	return diff.X * diff.Y
+	return c.Tiles.Dx() * c.Tiles.Dy()
 }
 
 var ErrInvalidZoom = errors.New("invalid zoom")
 
 const (
-	Zoom6Max = 63
-	Zoom5Max = 31
-	Zoom4Max = 15
-	Zoom3Max = 7
-	Zoom2Max = 3
+	Zoom6Max = 64
+	Zoom5Max = 32
+	Zoom4Max = 16
+	Zoom3Max = 8
+	Zoom2Max = 4
 )
 
 func (c *Config) MaxForZoom() (image.Point, error) {
@@ -88,16 +87,16 @@ func (c *Config) DetermineOffsetsByYear() error {
 			switch c.Year {
 			case 2013:
 				newTiles.Min.Y = 5
-				newTiles.Max.Y = 55
+				newTiles.Max.Y = 56
 			case 2020:
 				newTiles.Min.Y = 7
-				newTiles.Max.Y = 54
+				newTiles.Max.Y = 55
 			default:
 				newTiles.Min.Y = 8
-				newTiles.Max.Y = 55
+				newTiles.Max.Y = 56
 			}
 		case 5:
-			newTiles.Max.Y = 27
+			newTiles.Max.Y = 28
 			switch c.Year {
 			case 2013:
 				newTiles.Min.Y = 2
@@ -107,7 +106,7 @@ func (c *Config) DetermineOffsetsByYear() error {
 				newTiles.Min.Y = 4
 			}
 		case 4:
-			newTiles.Max.Y = 13
+			newTiles.Max.Y = 14
 			switch c.Year {
 			case 2013:
 				newTiles.Min.Y = 1
@@ -115,7 +114,7 @@ func (c *Config) DetermineOffsetsByYear() error {
 				newTiles.Min.Y = 2
 			}
 		case 3:
-			newTiles.Max.Y = 6
+			newTiles.Max.Y = 7
 			switch c.Year {
 			case 2013:
 			default:

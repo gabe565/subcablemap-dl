@@ -20,7 +20,7 @@ func New(ctx context.Context, conf *config.Config, opts ...Option) (*DynamicImag
 	d := &DynamicImage{
 		ctx:    ctx,
 		config: conf,
-		tiles:  make([]image.Image, conf.Tiles.Dx()+1),
+		tiles:  make([]image.Image, conf.Tiles.Dx()),
 	}
 	if err := d.downloadRow(0); err != nil {
 		d.error = err
@@ -97,7 +97,7 @@ func (d *DynamicImage) downloadRow(y int) error {
 	group.SetLimit(d.config.Parallelism)
 	var mu sync.Mutex
 
-	for x := range d.config.Tiles.Dx() + 1 {
+	for x := range d.config.Tiles.Dx() {
 		group.Go(func() error {
 			tileData, err := DownloadTile(ctx, d.config, image.Pt(x+d.config.Tiles.Min.X, y+d.config.Tiles.Min.Y))
 			if err != nil {
