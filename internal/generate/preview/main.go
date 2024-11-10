@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"gabe565.com/subcablemap-dl/internal/config"
-	"gabe565.com/subcablemap-dl/internal/downloader"
+	"gabe565.com/subcablemap-dl/internal/dynamicimage"
 	"github.com/disintegration/gift"
 )
 
@@ -35,11 +35,25 @@ func generate(ctx context.Context) error {
 		conf := config.New()
 		conf.Year = year
 		conf.Zoom = 2
+
 		if err := conf.DetermineOffsetsByYear(); err != nil {
 			return err
 		}
 
-		img, err := downloader.New(conf).Do(ctx)
+		if err := conf.CheckYear(ctx); err != nil {
+			return err
+		}
+
+		if err := conf.FindFormat(ctx); err != nil {
+			return err
+		}
+
+		dynamic, err := dynamicimage.New(ctx, conf)
+		if err != nil {
+			return err
+		}
+
+		img, err := dynamic.DownloadFull()
 		if err != nil {
 			return err
 		}

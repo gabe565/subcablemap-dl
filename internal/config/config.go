@@ -70,12 +70,6 @@ func (c *Config) MaxForZoom() (image.Point, error) {
 	return image.Point{}, fmt.Errorf("%w: %d", ErrInvalidZoom, c.Zoom)
 }
 
-func (c *Config) TileRect(tile image.Point) image.Rectangle {
-	x := (tile.X - c.Tiles.Min.X) * c.TileSize
-	y := (tile.Y - c.Tiles.Min.Y) * c.TileSize
-	return image.Rect(x, y, x+c.TileSize, y+c.TileSize)
-}
-
 var (
 	ErrMaxXTooLarge = errors.New("tile max x exceeds zoom level")
 	ErrMaxYTooLarge = errors.New("tile max y exceeds zoom level")

@@ -3,14 +3,14 @@ package cmd
 import (
 	"context"
 	"image/png"
-	"io"
 	"log/slog"
 	"os"
 	"strconv"
+	"time"
 
 	"gabe565.com/subcablemap-dl/internal/config"
-	"gabe565.com/subcablemap-dl/internal/downloader"
-	"github.com/schollz/progressbar/v3"
+	"gabe565.com/subcablemap-dl/internal/dynamicimage"
+	"github.com/dustin/go-humanize"
 	"github.com/spf13/cobra"
 )
 
@@ -57,17 +57,25 @@ func run(cmd *cobra.Command, args []string) error {
 		return completion(cmd)
 	}
 
-	img, err := downloader.New(conf).Do(cmd.Context())
-	if err != nil {
-		return err
-	}
-
 	path := "submarine-cable-map-" + strconv.Itoa(conf.Year) + ".png"
 	if len(args) > 0 {
 		path = args[0]
 	}
 
-	slog.Info("Creating file", "path", path, "dimensions", img.Bounds().Max)
+	slog.Info("Starting download",
+		"year", conf.Year,
+		"tiles", conf.TileCount(),
+		"tile_offsets", conf.Tiles,
+	)
+
+	img, err := dynamicimage.New(cmd.Context(), conf, dynamicimage.WithProgress())
+	if err != nil {
+		return err
+	}
+
+	log := slog.With("path", path)
+
+	log.Info("Creating file", "dimensions", img.Bounds().Max)
 	out, err := os.Create(path)
 	if err != nil {
 		return err
@@ -76,17 +84,23 @@ func run(cmd *cobra.Command, args []string) error {
 		_ = out.Close()
 	}()
 
-	bar := progressbar.DefaultBytes(-1, "Writing to file")
+	start := time.Now()
 	encoder := png.Encoder{CompressionLevel: conf.Compression.ToPNG()}
-	if err := encoder.Encode(io.MultiWriter(out, bar), img); err != nil {
+	if err := encoder.Encode(out, img); err != nil {
 		return err
 	}
-	_ = bar.Exit()
+	if img.Error() != nil {
+		return img.Error()
+	}
 
 	if err := out.Close(); err != nil {
 		return err
 	}
 
-	slog.Info("Done", "path", path)
+	if stat, err := os.Stat(path); err == nil {
+		log = log.With("size", humanize.IBytes(uint64(stat.Size()))) //nolint:gosec
+	}
+
+	log.Info("Done", "took", time.Since(start).Truncate(100*time.Millisecond))
 	return nil
 }
