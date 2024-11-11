@@ -10,11 +10,12 @@ import (
 
 	"gabe565.com/subcablemap-dl/internal/config"
 	"gabe565.com/subcablemap-dl/internal/dynamicimage"
+	"gabe565.com/utils/cobrax"
 	"github.com/dustin/go-humanize"
 	"github.com/spf13/cobra"
 )
 
-func New(options ...Option) *cobra.Command {
+func New(options ...cobrax.Option) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "subcablemap-dl [path]",
 		Short: "Download full-resolution versions of Telegeography Submarine Cable Maps",
@@ -34,7 +35,6 @@ func New(options ...Option) *cobra.Command {
 	for _, option := range options {
 		option(cmd)
 	}
-
 	return cmd
 }
 

@@ -1,3 +1,5 @@
+gabe565.com/utils v0.0.0-20241111053222-0f59399cbb3c h1:xKxZ9fGvYYihnqbyt1OE5Giz+rDQf5junHUxmvkFBfw=
+gabe565.com/utils v0.0.0-20241111053222-0f59399cbb3c/go.mod h1:ekV9VNVFXI1E8niHsgfb76RQHP2oJH2zYaCw1cEWrhA=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiErDT4WkJ2k=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/charmbracelet/lipgloss v0.10.0 h1:KWeXFSexGcfahHX+54URiZGkBFazf70JNMtwg/AFW3s=
