@@ -182,28 +182,29 @@ const URLTemplate = "https://tiles.telegeography.com/maps/submarine-cable-map-%d
 var ErrNoFormat = errors.New("could not discover file format")
 
 func (c *Config) FindFormat(ctx context.Context) error {
-	if c.Format == "" {
-		for _, v := range []string{"png", "png8", "png24"} {
-			url := fmt.Sprintf(URLTemplate, c.Year, c.Zoom, 0, 0, v)
-			req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
-			if err != nil {
-				return err
-			}
-
-			resp, err := http.DefaultClient.Do(req)
-			if resp != nil {
-				_, _ = io.Copy(io.Discard, resp.Body)
-				_ = resp.Body.Close()
-			}
-			if err != nil || resp.StatusCode != http.StatusOK {
-				continue
-			}
-
-			c.Format = v
-		}
-		if c.Format == "" {
-			return ErrNoFormat
-		}
+	if c.Format != "" {
+		return nil
 	}
-	return nil
+
+	for _, v := range []string{"png", "png8", "png24"} {
+		url := fmt.Sprintf(URLTemplate, c.Year, c.Zoom, 0, 0, v)
+		req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
+		if err != nil {
+			return err
+		}
+
+		resp, err := http.DefaultClient.Do(req)
+		if resp != nil {
+			_, _ = io.Copy(io.Discard, resp.Body)
+			_ = resp.Body.Close()
+		}
+		if err != nil || resp.StatusCode != http.StatusOK {
+			continue
+		}
+
+		c.Format = v
+		return nil
+	}
+
+	return ErrNoFormat
 }
