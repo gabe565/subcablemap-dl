@@ -154,7 +154,7 @@ func (c *Config) CheckYear(ctx context.Context) error {
 		c.Year = time.Now().Year()
 	}
 
-	url := "https://submarine-cable-map-" + strconv.Itoa(c.Year) + ".telegeography.com"
+	url := "https://tiles.telegeography.com/maps/submarine-cable-map-" + strconv.Itoa(c.Year) + "/"
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
 	if err != nil {
@@ -166,7 +166,7 @@ func (c *Config) CheckYear(ctx context.Context) error {
 		_, _ = io.Copy(io.Discard, resp.Body)
 		_ = resp.Body.Close()
 	}
-	if err != nil || resp.StatusCode != http.StatusOK {
+	if err != nil || resp.StatusCode == http.StatusNotFound {
 		if latest {
 			c.Year--
 			return c.CheckYear(ctx)
