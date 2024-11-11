@@ -162,6 +162,10 @@ func (c *Config) CheckYear(ctx context.Context) error {
 	}
 
 	resp, err := http.DefaultClient.Do(req)
+	if resp != nil {
+		_, _ = io.Copy(io.Discard, resp.Body)
+		_ = resp.Body.Close()
+	}
 	if err != nil || resp.StatusCode != http.StatusOK {
 		if latest {
 			c.Year--
@@ -169,8 +173,6 @@ func (c *Config) CheckYear(ctx context.Context) error {
 		}
 		return fmt.Errorf("%w: %d", ErrMissingYear, c.Year)
 	}
-	_, _ = io.Copy(io.Discard, resp.Body)
-	_ = resp.Body.Close()
 
 	return nil
 }
@@ -189,11 +191,13 @@ func (c *Config) FindFormat(ctx context.Context) error {
 			}
 
 			resp, err := http.DefaultClient.Do(req)
+			if resp != nil {
+				_, _ = io.Copy(io.Discard, resp.Body)
+				_ = resp.Body.Close()
+			}
 			if err != nil || resp.StatusCode != http.StatusOK {
 				continue
 			}
-			_, _ = io.Copy(io.Discard, resp.Body)
-			_ = resp.Body.Close()
 
 			c.Format = v
 		}
