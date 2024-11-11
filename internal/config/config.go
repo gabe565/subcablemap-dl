@@ -177,8 +177,6 @@ func (c *Config) CheckYear(ctx context.Context) error {
 	return nil
 }
 
-const URLTemplate = "https://tiles.telegeography.com/maps/submarine-cable-map-%d/%d/%d/%d.%s"
-
 var ErrNoFormat = errors.New("could not discover file format")
 
 func (c *Config) FindFormat(ctx context.Context) error {
@@ -187,7 +185,7 @@ func (c *Config) FindFormat(ctx context.Context) error {
 	}
 
 	for _, v := range []string{"png", "png8", "png24"} {
-		url := fmt.Sprintf(URLTemplate, c.Year, c.Zoom, 0, 0, v)
+		url := BuildURL(c.Year, c.Zoom, 0, 0, v)
 		req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
 		if err != nil {
 			return err

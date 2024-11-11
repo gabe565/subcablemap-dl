@@ -125,7 +125,7 @@ func (d *DynamicImage) downloadRow(y int) error {
 var ErrUnexpectedResponse = errors.New("unexpected response")
 
 func DownloadTile(ctx context.Context, conf *config.Config, point image.Point) (image.Image, error) {
-	url := fmt.Sprintf(config.URLTemplate, conf.Year, conf.Zoom, point.X, point.Y, conf.Format)
+	url := config.BuildURL(conf.Year, conf.Zoom, point.X, point.Y, conf.Format)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
