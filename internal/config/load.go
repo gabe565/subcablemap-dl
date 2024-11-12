@@ -10,8 +10,6 @@ import (
 var ErrMissingConfig = errors.New("command missing config")
 
 func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
-	InitLog()
-
 	conf, ok := FromContext(cmd.Context())
 	if !ok {
 		return conf, ErrMissingConfig

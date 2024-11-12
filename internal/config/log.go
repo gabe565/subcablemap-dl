@@ -5,12 +5,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/charmbracelet/log"
+	"github.com/lmittmann/tint"
 )
 
 func InitLog() {
-	slog.SetDefault(slog.New(log.NewWithOptions(os.Stderr, log.Options{
-		ReportTimestamp: true,
-		TimeFormat:      time.DateTime,
+	slog.SetDefault(slog.New(tint.NewHandler(os.Stderr, &tint.Options{
+		TimeFormat: time.Stamp,
 	})))
 }
