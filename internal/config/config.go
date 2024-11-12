@@ -146,7 +146,7 @@ func (c *Config) DetermineOffsetsByYear() error {
 	return nil
 }
 
-var ErrMissingYear = errors.New("could not find year")
+var ErrMissingYear = errors.New("map is not available for year")
 
 func (c *Config) CheckYear(ctx context.Context) error {
 	var latest bool
