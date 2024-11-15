@@ -3,7 +3,7 @@ module gabe565.com/subcablemap-dl
 go 1.23.3
 
 require (
-	gabe565.com/utils v0.0.0-20241111053222-0f59399cbb3c
+	gabe565.com/utils v0.0.0-20241114234101-e128cd3269b5
 	github.com/disintegration/gift v1.2.1
 	github.com/dmarkham/enumer v1.5.10
 	github.com/dustin/go-humanize v1.0.1
