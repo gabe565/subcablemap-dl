@@ -48,6 +48,11 @@ func validArgs(_ *cobra.Command, args []string, _ string) ([]string, cobra.Shell
 func run(cmd *cobra.Command, args []string) error {
 	cmd.SilenceUsage = true
 
+	slog.Info("Submarine Cable Map Downloader",
+		"version", cobrax.GetVersion(cmd),
+		"commit", cobrax.GetCommit(cmd),
+	)
+
 	conf, err := config.Load(cmd.Context(), cmd)
 	if err != nil {
 		return err
