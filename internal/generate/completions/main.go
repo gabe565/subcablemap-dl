@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"gabe565.com/subcablemap-dl/cmd"
-	"gabe565.com/subcablemap-dl/internal/config"
+	"gabe565.com/utils/cobrax"
 	flag "github.com/spf13/pflag"
 )
 
@@ -40,13 +40,12 @@ func main() {
 	var buf bytes.Buffer
 	rootCmd.SetOut(&buf)
 
-	for _, shell := range []string{config.ShellBash, config.ShellZsh, config.ShellFish} {
-		rootCmd.SetArgs([]string{"--completion=" + shell})
-		if err := rootCmd.Execute(); err != nil {
+	for _, shell := range []cobrax.Shell{cobrax.Bash, cobrax.Zsh, cobrax.Fish} {
+		if err := cobrax.GenCompletion(rootCmd, shell); err != nil {
 			panic(err)
 		}
 
-		f, err := os.Create(filepath.Join("completions", name+"."+shell))
+		f, err := os.Create(filepath.Join("completions", name+"."+string(shell)))
 		if err != nil {
 			panic(err)
 		}

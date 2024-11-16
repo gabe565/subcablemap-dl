@@ -3,11 +3,12 @@ package config
 import (
 	"strings"
 
+	"gabe565.com/utils/cobrax"
+	"gabe565.com/utils/must"
 	"github.com/spf13/cobra"
 )
 
 const (
-	FlagCompletion  = "completion"
 	FlagYear        = "year"
 	FlagNoCrop      = "no-crop"
 	FlagTileMinX    = "tile-min-x"
@@ -18,15 +19,10 @@ const (
 	FlagParallelism = "parallelism"
 	FlagFormat      = "format"
 	FlagCompression = "compression"
-
-	ShellBash       = "bash"
-	ShellZsh        = "zsh"
-	ShellFish       = "fish"
-	ShellPowerShell = "powershell"
 )
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
-	cmd.Flags().StringVar(&c.Completion, FlagCompletion, c.Completion, "Output command-line completion code for the specified shell (one of bash, zsh, fish, powershell)")
+	must.Must(cobrax.RegisterCompletionFlag(cmd))
 	cmd.Flags().IntVarP(&c.Year, FlagYear, "y", c.Year, "Year to download (default latest available)")
 	cmd.Flags().BoolVarP(&c.NoCrop, FlagNoCrop, "n", c.NoCrop, "Download the entire square map instead of cropping")
 	cmd.Flags().IntVar(&c.Tiles.Min.X, FlagTileMinX, c.Tiles.Min.X, "X tile min (default determined by year and zoom)")

@@ -53,10 +53,6 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	if conf.Completion != "" {
-		return completion(cmd)
-	}
-
 	path := "submarine-cable-map-" + strconv.Itoa(conf.Year) + ".png"
 	if len(args) > 0 {
 		path = args[0]

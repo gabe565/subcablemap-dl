@@ -10,9 +10,6 @@ import (
 
 func (c *Config) RegisterCompletions(cmd *cobra.Command) {
 	if err := errors.Join(
-		cmd.RegisterFlagCompletionFunc(FlagCompletion, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-			return []string{ShellBash, ShellZsh, ShellFish, ShellPowerShell}, cobra.ShellCompDirectiveNoFileComp
-		}),
 		cmd.RegisterFlagCompletionFunc(FlagYear, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 			return completeRange(2013, time.Now().Year())
 		}),
