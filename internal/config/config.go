@@ -18,6 +18,7 @@ import (
 func New() *Config {
 	return &Config{
 		BaseURL:     pflagx.URL{URL: &url.URL{Scheme: "https", Host: "tiles.telegeography.com"}},
+		Client:      &http.Client{},
 		TileSize:    256,
 		Zoom:        6,
 		Parallelism: 16,
@@ -27,6 +28,8 @@ func New() *Config {
 type Config struct {
 	Completion  string
 	BaseURL     pflagx.URL
+	Insecure    bool
+	Client      *http.Client
 	Year        int
 	TileSize    int
 	NoCrop      bool
@@ -167,7 +170,7 @@ func (c *Config) CheckYear(ctx context.Context) error {
 		return err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := c.Client.Do(req)
 	if resp != nil {
 		_, _ = io.Copy(io.Discard, resp.Body)
 		_ = resp.Body.Close()
@@ -202,7 +205,7 @@ func (c *Config) FindFormat(ctx context.Context) error {
 			return err
 		}
 
-		resp, err := http.DefaultClient.Do(req)
+		resp, err := c.Client.Do(req)
 		if resp != nil {
 			_, _ = io.Copy(io.Discard, resp.Body)
 			_ = resp.Body.Close()

@@ -14,6 +14,7 @@ subcablemap-dl [path] [flags]
   -c, --compression string   PNG compression level (one of default, none, fast, best) (default "default")
   -f, --format string        Tile format. Try png, png8, png24. (default detected)
   -h, --help                 help for subcablemap-dl
+  -k, --insecure             Skip HTTPS TLS verification
   -n, --no-crop              Download the entire square map instead of cropping
   -p, --parallelism int      Number of goroutines to use (default 16)
       --tile-max-x int       X tile max (default determined by year and zoom)

@@ -2,8 +2,12 @@ package config
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
+	"net/http"
 
+	"gabe565.com/utils/cobrax"
+	"gabe565.com/utils/httpx"
 	"github.com/spf13/cobra"
 )
 
@@ -20,6 +24,10 @@ func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
 	}
 
 	if conf.Completion == "" {
+		transport := http.DefaultTransport.(*http.Transport).Clone()
+		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: conf.Insecure} //nolint:gosec
+		conf.Client.Transport = httpx.NewUserAgentTransport(transport, cobrax.BuildUserAgent(cmd))
+
 		if err := conf.CheckYear(ctx); err != nil {
 			return conf, err
 		}

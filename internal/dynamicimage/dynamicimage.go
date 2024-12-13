@@ -128,7 +128,7 @@ func DownloadTile(ctx context.Context, conf *config.Config, point image.Point) (
 		return nil, err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := conf.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
