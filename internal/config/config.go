@@ -8,12 +8,16 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
+
+	"gabe565.com/utils/pflagx"
 )
 
 func New() *Config {
 	return &Config{
+		BaseURL:     pflagx.URL{URL: &url.URL{Scheme: "https", Host: "tiles.telegeography.com"}},
 		TileSize:    256,
 		Zoom:        6,
 		Parallelism: 16,
@@ -22,6 +26,7 @@ func New() *Config {
 
 type Config struct {
 	Completion  string
+	BaseURL     pflagx.URL
 	Year        int
 	TileSize    int
 	NoCrop      bool
@@ -187,8 +192,8 @@ func (c *Config) FindFormat(ctx context.Context) error {
 	}
 
 	for _, v := range []string{"png", "png8", "png24"} {
-		url := BuildURL(c.Year, c.Zoom, 0, 0, v)
-		req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
+		u := c.BuildURL(c.Year, c.Zoom, 0, 0, v)
+		req, err := http.NewRequestWithContext(ctx, http.MethodHead, u.String(), nil)
 		if err != nil {
 			return err
 		}

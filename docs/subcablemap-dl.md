@@ -9,6 +9,7 @@ subcablemap-dl [path] [flags]
 ### Options
 
 ```
+      --base-url string      Base tile download URL (default "https://tiles.telegeography.com")
       --completion string    Generate the autocompletion script for the specified shell (one of bash, zsh, fish, powershell)
   -c, --compression string   PNG compression level (one of default, none, fast, best) (default "default")
   -f, --format string        Tile format. Try png, png8, png24. (default detected)

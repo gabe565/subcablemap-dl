@@ -9,6 +9,9 @@ import (
 )
 
 func (c *Config) RegisterCompletions(cmd *cobra.Command) {
+	must.Must(cmd.RegisterFlagCompletionFunc(FlagBaseURL, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
+		return []string{"https://"}, cobra.ShellCompDirectiveNoFileComp | cobra.ShellCompDirectiveNoSpace
+	}))
 	must.Must(cmd.RegisterFlagCompletionFunc(FlagYear, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return completeRange(2013, time.Now().Year())
 	}))

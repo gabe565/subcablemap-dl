@@ -9,6 +9,7 @@ import (
 )
 
 const (
+	FlagBaseURL     = "base-url"
 	FlagYear        = "year"
 	FlagNoCrop      = "no-crop"
 	FlagTileMinX    = "tile-min-x"
@@ -23,6 +24,7 @@ const (
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
 	must.Must(cobrax.RegisterCompletionFlag(cmd))
+	cmd.Flags().Var(&c.BaseURL, FlagBaseURL, "Base tile download URL")
 	cmd.Flags().IntVarP(&c.Year, FlagYear, "y", c.Year, "Year to download (default latest available)")
 	cmd.Flags().BoolVarP(&c.NoCrop, FlagNoCrop, "n", c.NoCrop, "Download the entire square map instead of cropping")
 	cmd.Flags().IntVar(&c.Tiles.Min.X, FlagTileMinX, c.Tiles.Min.X, "X tile min (default determined by year and zoom)")

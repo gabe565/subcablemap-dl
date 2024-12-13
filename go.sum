@@ -1,5 +1,5 @@
-gabe565.com/utils v0.0.0-20241116061915-abe2278ecd5c h1:1rmGsS/Sbm85ZELLkfOtXJ99v3YHdmqvkhMDLteLUug=
-gabe565.com/utils v0.0.0-20241116061915-abe2278ecd5c/go.mod h1:1WioSVukwGZYG4Q0LJBnRhgYyVljmW2Izl+RW36ALUc=
+gabe565.com/utils v0.0.0-20241213205714-152b8de1d3fe h1:/QXzT2uIjZJBhJ8eADVxXMPZT716LpRVLj4TeZm+Qz0=
+gabe565.com/utils v0.0.0-20241213205714-152b8de1d3fe/go.mod h1:6FZP8OeF0k3hTsPClyDGEILcBg3hvGcSp4u4pmjMusY=
 github.com/chengxilo/virtualterm v1.0.4 h1:Z6IpERbRVlfB8WkOmtbHiDbBANU7cimRIof7mk9/PwM=
 github.com/chengxilo/virtualterm v1.0.4/go.mod h1:DyxxBZz/x1iqJjFxTFcr6/x+jSpqN0iwWCOK1q10rlY=
 github.com/cpuguy83/go-md2man/v2 v2.0.4 h1:wfIWP927BUkWJb2NmU/kNDYIBTh/ziUX91+lVfRxZq4=
