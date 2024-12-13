@@ -184,13 +184,17 @@ func (c *Config) CheckYear(ctx context.Context) error {
 	return nil
 }
 
-var ErrNoFormat = errors.New("could not discover file format")
+var (
+	ErrNoFormat           = errors.New("could not discover file format")
+	ErrUnexpectedResponse = errors.New("unexpected response")
+)
 
 func (c *Config) FindFormat(ctx context.Context) error {
 	if c.Format != "" {
 		return nil
 	}
 
+	var errs []error
 	for _, v := range []string{"png", "png8", "png24"} {
 		u := c.BuildURL(c.Year, c.Zoom, 0, 0, v)
 		req, err := http.NewRequestWithContext(ctx, http.MethodHead, u.String(), nil)
@@ -203,13 +207,17 @@ func (c *Config) FindFormat(ctx context.Context) error {
 			_, _ = io.Copy(io.Discard, resp.Body)
 			_ = resp.Body.Close()
 		}
-		if err != nil || resp.StatusCode != http.StatusOK {
-			continue
+		switch {
+		case err != nil:
+			errs = append(errs, err)
+		case resp.StatusCode != http.StatusOK:
+			errs = append(errs, fmt.Errorf("%w from %q: %s", ErrUnexpectedResponse, u.String(), resp.Status))
+		default:
+			c.Format = v
+			return nil
 		}
-
-		c.Format = v
-		return nil
 	}
 
-	return ErrNoFormat
+	errs = append([]error{ErrNoFormat}, errs...)
+	return errors.Join(errs...)
 }

@@ -2,7 +2,6 @@ package dynamicimage
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -122,8 +121,6 @@ func (d *DynamicImage) downloadRow(y int) error {
 	return nil
 }
 
-var ErrUnexpectedResponse = errors.New("unexpected response")
-
 func DownloadTile(ctx context.Context, conf *config.Config, point image.Point) (image.Image, error) {
 	url := conf.BuildURL(conf.Year, conf.Zoom, point.X, point.Y, conf.Format)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url.String(), nil)
@@ -140,7 +137,7 @@ func DownloadTile(ctx context.Context, conf *config.Config, point image.Point) (
 	}()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("%w from %s: %s", ErrUnexpectedResponse, url, resp.Status)
+		return nil, fmt.Errorf("%w from %q: %s", config.ErrUnexpectedResponse, url, resp.Status)
 	}
 
 	tileData, err := png.Decode(resp.Body)
