@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+	"path"
 	"strconv"
 	"time"
 
@@ -163,9 +164,10 @@ func (c *Config) CheckYear(ctx context.Context) error {
 		c.Year = time.Now().Year()
 	}
 
-	url := "https://tiles.telegeography.com/maps/submarine-cable-map-" + strconv.Itoa(c.Year) + "/"
+	u := *c.BaseURL.URL
+	u.Path = path.Join(u.Path, "maps/submarine-cable-map-"+strconv.Itoa(c.Year))
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodHead, url, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodHead, u.String(), nil)
 	if err != nil {
 		return err
 	}
