@@ -6,7 +6,7 @@ require (
 	gabe565.com/utils v0.0.0-20241213205714-152b8de1d3fe
 	github.com/disintegration/gift v1.2.1
 	github.com/dmarkham/enumer v1.5.10
-	github.com/dustin/go-humanize v1.0.1
+	github.com/labstack/gommon v0.4.2
 	github.com/lmittmann/tint v1.0.6
 	github.com/schollz/progressbar/v3 v3.17.1
 	github.com/spf13/cobra v1.8.1

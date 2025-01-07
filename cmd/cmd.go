@@ -11,7 +11,7 @@ import (
 	"gabe565.com/subcablemap-dl/internal/config"
 	"gabe565.com/subcablemap-dl/internal/dynamicimage"
 	"gabe565.com/utils/cobrax"
-	"github.com/dustin/go-humanize"
+	"github.com/labstack/gommon/bytes"
 	"github.com/spf13/cobra"
 )
 
@@ -99,7 +99,7 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	if stat, err := os.Stat(path); err == nil {
-		log = log.With("size", humanize.IBytes(uint64(stat.Size()))) //nolint:gosec
+		log = log.With("size", bytes.Format(stat.Size()))
 	}
 
 	log.Info("Done", "took", time.Since(start).Truncate(100*time.Millisecond))
