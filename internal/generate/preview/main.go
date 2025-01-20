@@ -20,7 +20,7 @@ func main() {
 }
 
 func generate(ctx context.Context) error {
-	years := []int{2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024}
+	years := []int{2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023, 2024, 2025}
 	const TileWidth, TileHeight, Cols = 256, 183, 4
 	previewImg := image.NewNRGBA(image.Rect(0, 0, TileWidth*Cols, TileHeight*len(years)/Cols))
 
