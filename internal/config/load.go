@@ -28,13 +28,13 @@ func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
 			return conf, err
 		}
 
+		if err := conf.UpdateBounds(); err != nil {
+			return conf, err
+		}
+
 		if err := conf.FindFormat(ctx); err != nil {
 			return conf, err
 		}
-	}
-
-	if err := conf.DetermineOffsetsByYear(); err != nil {
-		return conf, err
 	}
 
 	return conf, nil

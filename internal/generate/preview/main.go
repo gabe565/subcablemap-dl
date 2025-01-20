@@ -36,10 +36,6 @@ func generate(ctx context.Context) error {
 		conf.Year = year
 		conf.Zoom = 2
 
-		if err := conf.DetermineOffsetsByYear(); err != nil {
-			return err
-		}
-
 		if err := conf.CheckYear(ctx); err != nil {
 			return err
 		}
@@ -47,6 +43,8 @@ func generate(ctx context.Context) error {
 		if err := conf.FindFormat(ctx); err != nil {
 			return err
 		}
+
+		conf.Bounds = image.Rect(0, 144, 1024, 880)
 
 		dynamic, err := dynamicimage.New(ctx, conf)
 		if err != nil {

@@ -15,18 +15,10 @@ func (c *Config) RegisterCompletions(cmd *cobra.Command) {
 	must.Must(cmd.RegisterFlagCompletionFunc(FlagYear, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return completeRange(2013, time.Now().Year())
 	}))
-	must.Must(cmd.RegisterFlagCompletionFunc(FlagTileMinX, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return completeRange(0, 63)
-	}))
-	must.Must(cmd.RegisterFlagCompletionFunc(FlagTileMaxX, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return completeRange(0, 63)
-	}))
-	must.Must(cmd.RegisterFlagCompletionFunc(FlagTileMinY, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return completeRange(0, 63)
-	}))
-	must.Must(cmd.RegisterFlagCompletionFunc(FlagTileMaxY, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return completeRange(0, 63)
-	}))
+	must.Must(cmd.RegisterFlagCompletionFunc(FlagCropLeft, cobra.NoFileCompletions))
+	must.Must(cmd.RegisterFlagCompletionFunc(FlagCropRight, cobra.NoFileCompletions))
+	must.Must(cmd.RegisterFlagCompletionFunc(FlagCropTop, cobra.NoFileCompletions))
+	must.Must(cmd.RegisterFlagCompletionFunc(FlagCropBottom, cobra.NoFileCompletions))
 	must.Must(cmd.RegisterFlagCompletionFunc(FlagZoom, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
 		return completeRange(2, 6)
 	}))

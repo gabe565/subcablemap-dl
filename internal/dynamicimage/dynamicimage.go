@@ -19,11 +19,8 @@ func New(ctx context.Context, conf *config.Config, opts ...Option) (*DynamicImag
 	d := &DynamicImage{
 		ctx:    ctx,
 		config: conf,
-		tiles:  make([]image.Image, conf.Tiles.Dx()),
-	}
-	if err := d.downloadRow(0); err != nil {
-		d.error = err
-		return d, err
+		tiles:  make([]image.Image, conf.TilesHorizontal()),
+		row:    -1,
 	}
 	for _, opt := range opts {
 		opt(d)
@@ -36,7 +33,6 @@ type DynamicImage struct {
 	config *config.Config
 	row    int
 	tiles  []image.Image
-	once   sync.Once
 	error  error
 	bar    *progressbar.ProgressBar
 }
@@ -46,7 +42,7 @@ func (d *DynamicImage) ColorModel() color.Model {
 }
 
 func (d *DynamicImage) Bounds() image.Rectangle {
-	return image.Rect(0, 0, d.config.OutputWidth(), d.config.OutputHeight())
+	return image.Rectangle{Max: image.Pt(d.config.Bounds.Dx(), d.config.Bounds.Dy())}
 }
 
 func (d *DynamicImage) Opaque() bool {
@@ -58,6 +54,9 @@ func (d *DynamicImage) At(x, y int) color.Color {
 		return color.NRGBA{}
 	}
 
+	x += d.config.Bounds.Min.X
+	y += d.config.Bounds.Min.Y
+
 	tileRow := y / d.config.TileSize
 	if tileRow != d.row {
 		if err := d.downloadRow(tileRow); err != nil {
@@ -66,15 +65,11 @@ func (d *DynamicImage) At(x, y int) color.Color {
 		}
 	}
 
-	if x == 0 && d.bar != nil {
+	if x == d.config.Bounds.Min.X && d.bar != nil {
 		_ = d.bar.Add64(1)
 	}
 
 	img := d.tiles[x/d.config.TileSize]
-	if img == nil {
-		return color.NRGBA{}
-	}
-
 	partX, partY := x%d.config.TileSize, y%d.config.TileSize
 	return img.At(partX, partY)
 }
@@ -96,16 +91,12 @@ func (d *DynamicImage) downloadRow(y int) error {
 	group.SetLimit(d.config.Parallelism)
 	var mu sync.Mutex
 
-	for x := range d.config.Tiles.Dx() {
+	for x := range d.config.TilesHorizontal() {
 		group.Go(func() error {
-			tileData, err := DownloadTile(ctx, d.config, image.Pt(x+d.config.Tiles.Min.X, y+d.config.Tiles.Min.Y))
+			tileData, err := DownloadTile(ctx, d.config, image.Pt(x, y))
 			if err != nil {
 				return err
 			}
-
-			d.once.Do(func() {
-				d.config.TileSize = tileData.Bounds().Max.X
-			})
 
 			mu.Lock()
 			defer mu.Unlock()
@@ -121,8 +112,8 @@ func (d *DynamicImage) downloadRow(y int) error {
 	return nil
 }
 
-func DownloadTile(ctx context.Context, conf *config.Config, point image.Point) (image.Image, error) {
-	url := conf.BuildURL(conf.Year, conf.Zoom, point.X, point.Y, conf.Format)
+func DownloadTile(ctx context.Context, conf *config.Config, pt image.Point) (image.Image, error) {
+	url := conf.BuildURL(conf.Year, conf.Zoom, pt, conf.Format)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url.String(), nil)
 	if err != nil {
 		return nil, err

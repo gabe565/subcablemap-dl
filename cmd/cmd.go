@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"image"
 	"image/png"
 	"log/slog"
 	"os"
@@ -66,7 +67,7 @@ func run(cmd *cobra.Command, args []string) error {
 	slog.Info("Starting download",
 		"year", conf.Year,
 		"tiles", conf.TileCount(),
-		"tile_offsets", conf.Tiles,
+		"bounds", conf.Bounds,
 	)
 
 	img, err := dynamicimage.New(cmd.Context(), conf, dynamicimage.WithProgress())
@@ -76,7 +77,7 @@ func run(cmd *cobra.Command, args []string) error {
 
 	log := slog.With("path", path)
 
-	log.Info("Creating file", "dimensions", img.Bounds().Max)
+	log.Info("Creating file", "dimensions", image.Pt(conf.Bounds.Dx(), conf.Bounds.Dy()))
 	out, err := os.Create(path)
 	if err != nil {
 		return err

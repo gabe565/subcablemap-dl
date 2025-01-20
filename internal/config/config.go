@@ -7,6 +7,7 @@ import (
 	"image"
 	"io"
 	"log/slog"
+	"math"
 	"net/http"
 	"net/url"
 	"path"
@@ -33,24 +34,25 @@ type Config struct {
 	Client      *http.Client
 	Year        int
 	TileSize    int
-	NoCrop      bool
-	Tiles       image.Rectangle
+	FullImage   bool
+	Crop        image.Rectangle
+	Bounds      image.Rectangle
 	Zoom        int
 	Parallelism int
 	Format      string
 	Compression CompressionLevel
 }
 
-func (c *Config) OutputWidth() int {
-	return (c.Tiles.Max.X - c.Tiles.Min.X) * c.TileSize
+func (c *Config) TilesHorizontal() int {
+	return int(math.Ceil(float64(c.Bounds.Dx()) / float64(c.TileSize)))
 }
 
-func (c *Config) OutputHeight() int {
-	return (c.Tiles.Max.Y - c.Tiles.Min.Y) * c.TileSize
+func (c *Config) TilesVertical() int {
+	return int(math.Ceil(float64(c.Bounds.Dy()) / float64(c.TileSize)))
 }
 
 func (c *Config) TileCount() int {
-	return c.Tiles.Dx() * c.Tiles.Dy()
+	return c.TilesHorizontal() * c.TilesVertical()
 }
 
 var ErrInvalidZoom = errors.New("invalid zoom")
@@ -66,93 +68,73 @@ const (
 func (c *Config) MaxForZoom() (image.Point, error) {
 	switch c.Zoom {
 	case 6:
-		return image.Pt(Zoom6Max, Zoom6Max), nil
+		return image.Pt(Zoom6Max*c.TileSize, Zoom6Max*c.TileSize), nil
 	case 5:
-		return image.Pt(Zoom5Max, Zoom5Max), nil
+		return image.Pt(Zoom5Max*c.TileSize, Zoom5Max*c.TileSize), nil
 	case 4:
-		return image.Pt(Zoom4Max, Zoom4Max), nil
+		return image.Pt(Zoom4Max*c.TileSize, Zoom4Max*c.TileSize), nil
 	case 3:
-		return image.Pt(Zoom3Max, Zoom3Max), nil
+		return image.Pt(Zoom3Max*c.TileSize, Zoom3Max*c.TileSize), nil
 	case 2:
-		return image.Pt(Zoom2Max, Zoom2Max), nil
+		return image.Pt(Zoom2Max*c.TileSize, Zoom2Max*c.TileSize), nil
 	}
 	return image.Point{}, fmt.Errorf("%w: %d", ErrInvalidZoom, c.Zoom)
 }
 
 var (
-	ErrMaxXTooLarge = errors.New("tile max x exceeds zoom level")
-	ErrMaxYTooLarge = errors.New("tile max y exceeds zoom level")
+	ErrBoundsTooSmall = errors.New("bounds too small")
+	ErrBoundsTooLarge = errors.New("bounds too large")
 )
 
-func (c *Config) DetermineOffsetsByYear() error {
+func (c *Config) UpdateBounds() error {
+	var err error
+	c.Bounds, err = c.GetYearBounds()
+	if err != nil {
+		return err
+	}
+
+	c.Bounds = image.Rect(
+		c.Bounds.Min.X+c.Crop.Min.X,
+		c.Bounds.Min.Y+c.Crop.Min.Y,
+		c.Bounds.Max.X-c.Crop.Max.X,
+		c.Bounds.Max.Y-c.Crop.Max.Y,
+	)
+
 	maxPoint, err := c.MaxForZoom()
 	if err != nil {
 		return err
 	}
-	newTiles := image.Rectangle{Min: c.Tiles.Min, Max: maxPoint}
 
-	if !c.NoCrop {
-		switch c.Zoom {
-		case 6:
-			switch c.Year {
-			case 2013:
-				newTiles.Min.Y = 5
-				newTiles.Max.Y = 56
-			case 2020:
-				newTiles.Min.Y = 7
-				newTiles.Max.Y = 55
-			default:
-				newTiles.Min.Y = 8
-				newTiles.Max.Y = 56
-			}
-		case 5:
-			newTiles.Max.Y = 28
-			switch c.Year {
-			case 2013:
-				newTiles.Min.Y = 2
-			case 2020:
-				newTiles.Min.Y = 3
-			default:
-				newTiles.Min.Y = 4
-			}
-		case 4:
-			newTiles.Max.Y = 14
-			switch c.Year {
-			case 2013:
-				newTiles.Min.Y = 1
-			default:
-				newTiles.Min.Y = 2
-			}
-		case 3:
-			newTiles.Max.Y = 7
-			switch c.Year {
-			case 2013:
-			default:
-				newTiles.Min.Y = 1
-			}
-		}
+	if c.Bounds.Min.X < 0 || c.Bounds.Min.Y < 0 {
+		return fmt.Errorf("%w: %s must be greater than %s", ErrBoundsTooSmall, c.Bounds.Min, image.Pt(0, 0))
 	}
-
-	if c.Tiles.Min.X == 0 {
-		c.Tiles.Min.X = newTiles.Min.X
-	}
-	if c.Tiles.Min.Y == 0 {
-		c.Tiles.Min.Y = newTiles.Min.Y
-	}
-	if c.Tiles.Max.X == 0 {
-		c.Tiles.Max.X = newTiles.Max.X
-	}
-	if c.Tiles.Max.Y == 0 {
-		c.Tiles.Max.Y = newTiles.Max.Y
-	}
-
-	if c.Tiles.Max.X > maxPoint.X {
-		return ErrMaxXTooLarge
-	}
-	if c.Tiles.Max.Y > maxPoint.Y {
-		return ErrMaxYTooLarge
+	if c.Bounds.Max.X > maxPoint.X || c.Bounds.Max.Y > maxPoint.Y {
+		return fmt.Errorf("%w: %s must be less than %s", ErrBoundsTooLarge, c.Bounds.Max, maxPoint)
 	}
 	return nil
+}
+
+func (c *Config) GetYearBounds() (image.Rectangle, error) {
+	bounds, err := c.MaxForZoom()
+	if err != nil {
+		return image.Rectangle{}, err
+	}
+
+	frame := image.Rectangle{Max: bounds}
+	if c.FullImage {
+		return frame, nil
+	}
+
+	zoomOffset := int(math.Pow(2, float64(c.Zoom)-2))
+	switch c.Year {
+	case 2013:
+		frame.Min.Y = 80 * zoomOffset
+		frame.Max.Y -= 144 * zoomOffset
+	default:
+		frame.Min.Y = 144 * zoomOffset
+		frame.Max.Y -= 144 * zoomOffset
+	}
+	return frame, nil
 }
 
 var ErrMissingYear = errors.New("map is not available for year")
@@ -201,7 +183,7 @@ func (c *Config) FindFormat(ctx context.Context) error {
 
 	var errs []error
 	for _, v := range []string{"png", "png8", "png24"} {
-		u := c.BuildURL(c.Year, c.Zoom, 0, 0, v)
+		u := c.BuildURL(c.Year, c.Zoom, image.Point{}, v)
 		req, err := http.NewRequestWithContext(ctx, http.MethodHead, u.String(), nil)
 		if err != nil {
 			return err
