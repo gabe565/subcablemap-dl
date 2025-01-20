@@ -19,10 +19,6 @@ func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
 		return conf, ErrMissingConfig
 	}
 
-	if err := conf.DetermineOffsetsByYear(); err != nil {
-		return conf, err
-	}
-
 	if conf.Completion == "" {
 		transport := http.DefaultTransport.(*http.Transport).Clone()
 		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: conf.Insecure} //nolint:gosec
@@ -35,6 +31,10 @@ func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
 		if err := conf.FindFormat(ctx); err != nil {
 			return conf, err
 		}
+	}
+
+	if err := conf.DetermineOffsetsByYear(); err != nil {
+		return conf, err
 	}
 
 	return conf, nil
