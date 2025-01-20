@@ -6,6 +6,7 @@ import (
 	"image/png"
 	"log/slog"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -60,8 +61,11 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 
 	path := "submarine-cable-map-" + strconv.Itoa(conf.Year) + ".png"
+	tmp := "." + path
 	if len(args) > 0 {
 		path = args[0]
+		base, file := filepath.Split(path)
+		tmp = filepath.Join(base, "."+file)
 	}
 
 	slog.Info("Starting download",
@@ -75,15 +79,13 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	log := slog.With("path", path)
-
-	log.Info("Creating file", "dimensions", image.Pt(conf.Bounds.Dx(), conf.Bounds.Dy()))
-	out, err := os.Create(path)
+	out, err := os.Create(tmp)
 	if err != nil {
 		return err
 	}
 	defer func() {
 		_ = out.Close()
+		_ = os.Remove(tmp)
 	}()
 
 	start := time.Now()
@@ -99,7 +101,15 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	if stat, err := os.Stat(path); err == nil {
+	if err := os.Rename(tmp, path); err != nil {
+		return err
+	}
+
+	log := slog.With(
+		"path", path,
+		"dimensions", image.Pt(conf.Bounds.Dx(), conf.Bounds.Dy()),
+	)
+	if stat, err := os.Stat(tmp); err == nil {
 		log = log.With("size", bytes.Format(stat.Size()))
 	}
 
