@@ -3,7 +3,7 @@
 [![Build](https://github.com/gabe565/subcablemap-dl/actions/workflows/build.yaml/badge.svg)](https://github.com/gabe565/subcablemap-dl/actions/workflows/build.yaml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gabe565/subcablemap-dl)](https://goreportcard.com/report/github.com/gabe565/subcablemap-dl)
 
-Downloads and combines all tiles for the [Telegeography Submarine Cable Map](https://submarine-cable-map-2024.telegeography.com/) to create a full-resolution image. All maps since 2013 are supported.
+Downloads and combines all tiles for the [Telegeography Submarine Cable Map](https://submarine-cable-map-2025.telegeography.com/) to create a full-resolution image. All maps since 2013 are supported.
 
 ![preview](https://github.com/user-attachments/assets/bd591f9e-fa9e-46b0-833d-362382735937)
 
@@ -88,7 +88,7 @@ A Docker image is available at [`ghcr.io/gabe565/subcablemap-dl`](https://ghcr.i
 
 #### Usage
 ```shell
-docker run --rm -it -v "$PWD:/data" ghcr.io/gabe565/subcablemap-dl --year=2024
+docker run --rm -it -v "$PWD:/data" ghcr.io/gabe565/subcablemap-dl --year=2025
 ```
 </details>
 
@@ -112,10 +112,10 @@ go install gabe565.com/subcablemap-dl@latest
 
 ## Usage
 
-To download the 2024 map, run
+To download the 2025 map, run
 ```shell
-subcablemap-dl --year=2024
+subcablemap-dl --year=2025
 ```
-When done, the map will be available at `submarine-cable-map-2024.png`.
+When done, the map will be available at `submarine-cable-map-2025.png`.
 
 For full command-line reference, see [docs](./docs/subcablemap-dl.md).
