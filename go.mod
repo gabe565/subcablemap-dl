@@ -1,6 +1,6 @@
 module gabe565.com/subcablemap-dl
 
-go 1.23.4
+go 1.23.5
 
 require (
 	gabe565.com/utils v0.0.0-20241213205714-152b8de1d3fe
