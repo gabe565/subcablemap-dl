@@ -41,6 +41,7 @@ type Config struct {
 	Parallelism int
 	Format      string
 	Compression CompressionLevel
+	NoProgress  bool
 }
 
 func (c *Config) TilesHorizontal() int {

@@ -21,6 +21,7 @@ const (
 	FlagParallelism = "parallelism"
 	FlagFormat      = "format"
 	FlagCompression = "compression"
+	FlagNoProgress  = "no-progress"
 )
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
@@ -38,4 +39,5 @@ func (c *Config) RegisterFlags(cmd *cobra.Command) {
 	fs.IntVarP(&c.Parallelism, FlagParallelism, "p", c.Parallelism, "Number of goroutines to use")
 	fs.StringVarP(&c.Format, FlagFormat, "f", c.Format, "Tile format. Try png, png8, png24. (default detected)")
 	fs.VarP(&c.Compression, FlagCompression, "c", "PNG compression level (one of "+strings.Join(CompressionLevelStrings(), ", ")+")")
+	fs.BoolVar(&c.NoProgress, FlagNoProgress, c.NoProgress, "Do not show progress bar")
 }

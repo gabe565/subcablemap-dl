@@ -74,7 +74,7 @@ func run(cmd *cobra.Command, args []string) error {
 		"bounds", conf.Bounds,
 	)
 
-	img, err := dynamicimage.New(cmd.Context(), conf, dynamicimage.WithProgress())
+	img, err := dynamicimage.New(cmd.Context(), conf, dynamicimage.WithProgress(!conf.NoProgress))
 	if err != nil {
 		return err
 	}
