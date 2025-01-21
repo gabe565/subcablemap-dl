@@ -92,7 +92,7 @@ docker run --rm -it -v "$PWD:/data" ghcr.io/gabe565/subcablemap-dl --year=2025
 ```
 </details>
 
-### Manual Installation
+### Manual Installation (Windows)
 
 <details>
   <summary>Click to expand</summary>
@@ -100,7 +100,7 @@ docker run --rm -it -v "$PWD:/data" ghcr.io/gabe565/subcablemap-dl --year=2025
 A binary is built for each release. You can either download one of these pre-built release assets, or you can perform a local Go build.
 
 #### Released Binary
-1. Download and run the [latest release](https://github.com/gabe565/subcablemap-dl/releases/latest) for your system and architecture.
+1. Download the [latest release](https://github.com/gabe565/subcablemap-dl/releases/latest) for your system and architecture.
 2. Extract the binary and place it in the desired directory.
 
 #### Local Go Build
