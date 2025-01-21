@@ -128,6 +128,9 @@ func (c *Config) GetYearBounds() (image.Rectangle, error) {
 
 	zoomOffset := int(math.Pow(2, float64(c.Zoom)-2))
 	switch c.Year {
+	case 2012:
+		frame.Min.Y = 13 * zoomOffset
+		frame.Max.Y -= 300 * zoomOffset
 	case 2013:
 		frame.Min.Y = 80 * zoomOffset
 		frame.Max.Y -= 144 * zoomOffset

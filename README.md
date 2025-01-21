@@ -3,7 +3,7 @@
 [![Build](https://github.com/gabe565/subcablemap-dl/actions/workflows/build.yaml/badge.svg)](https://github.com/gabe565/subcablemap-dl/actions/workflows/build.yaml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/gabe565/subcablemap-dl)](https://goreportcard.com/report/github.com/gabe565/subcablemap-dl)
 
-Downloads and combines all tiles for the [Telegeography Submarine Cable Map](https://submarine-cable-map-2025.telegeography.com/) to create a full-resolution image. All maps since 2013 are supported.
+Downloads and combines all tiles for the [Telegeography Submarine Cable Map](https://submarine-cable-map-2025.telegeography.com/) to create a full-resolution image. All maps since 2012 are supported.
 
 ![preview](https://github.com/user-attachments/assets/bd591f9e-fa9e-46b0-833d-362382735937)
 

@@ -13,7 +13,7 @@ func (c *Config) RegisterCompletions(cmd *cobra.Command) {
 		return []string{"https://"}, cobra.ShellCompDirectiveNoFileComp | cobra.ShellCompDirectiveNoSpace
 	}))
 	must.Must(cmd.RegisterFlagCompletionFunc(FlagYear, func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {
-		return completeRange(2013, time.Now().Year())
+		return completeRange(2012, time.Now().Year())
 	}))
 	must.Must(cmd.RegisterFlagCompletionFunc(FlagCropLeft, cobra.NoFileCompletions))
 	must.Must(cmd.RegisterFlagCompletionFunc(FlagCropRight, cobra.NoFileCompletions))
