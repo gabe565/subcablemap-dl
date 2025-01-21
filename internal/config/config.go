@@ -67,19 +67,22 @@ const (
 )
 
 func (c *Config) MaxForZoom() (image.Point, error) {
+	var p image.Point
 	switch c.Zoom {
 	case 6:
-		return image.Pt(Zoom6Max*c.TileSize, Zoom6Max*c.TileSize), nil
+		p = image.Pt(Zoom6Max, Zoom6Max)
 	case 5:
-		return image.Pt(Zoom5Max*c.TileSize, Zoom5Max*c.TileSize), nil
+		p = image.Pt(Zoom5Max, Zoom5Max)
 	case 4:
-		return image.Pt(Zoom4Max*c.TileSize, Zoom4Max*c.TileSize), nil
+		p = image.Pt(Zoom4Max, Zoom4Max)
 	case 3:
-		return image.Pt(Zoom3Max*c.TileSize, Zoom3Max*c.TileSize), nil
+		p = image.Pt(Zoom3Max, Zoom3Max)
 	case 2:
-		return image.Pt(Zoom2Max*c.TileSize, Zoom2Max*c.TileSize), nil
+		p = image.Pt(Zoom2Max, Zoom2Max)
+	default:
+		return p, fmt.Errorf("%w: %d", ErrInvalidZoom, c.Zoom)
 	}
-	return image.Point{}, fmt.Errorf("%w: %d", ErrInvalidZoom, c.Zoom)
+	return p.Mul(c.TileSize), nil
 }
 
 var (
