@@ -9,7 +9,7 @@ require (
 	github.com/lmittmann/tint v1.0.7
 	github.com/schollz/progressbar/v3 v3.18.0
 	github.com/spf13/cobra v1.8.1
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/pflag v1.0.6
 	golang.org/x/sync v0.10.0
 )
 
