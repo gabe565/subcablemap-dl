@@ -6,7 +6,7 @@ require (
 	gabe565.com/utils v0.0.0-20250130072635-ed882da6fcdd
 	github.com/disintegration/gift v1.2.1
 	github.com/dmarkham/enumer v1.5.10
-	github.com/lmittmann/tint v1.0.6
+	github.com/lmittmann/tint v1.0.7
 	github.com/schollz/progressbar/v3 v3.18.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
