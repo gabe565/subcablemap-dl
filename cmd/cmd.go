@@ -109,7 +109,7 @@ func run(cmd *cobra.Command, args []string) error {
 		"path", path,
 		"dimensions", image.Pt(conf.Bounds.Dx(), conf.Bounds.Dy()),
 	)
-	if stat, err := os.Stat(tmp); err == nil {
+	if stat, err := os.Stat(path); err == nil {
 		log = log.With("size", bytefmt.Encode(stat.Size()))
 	}
 
