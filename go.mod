@@ -3,10 +3,9 @@ module gabe565.com/subcablemap-dl
 go 1.23.5
 
 require (
-	gabe565.com/utils v0.0.0-20241213205714-152b8de1d3fe
+	gabe565.com/utils v0.0.0-20250130072635-ed882da6fcdd
 	github.com/disintegration/gift v1.2.1
 	github.com/dmarkham/enumer v1.5.10
-	github.com/labstack/gommon v0.4.2
 	github.com/lmittmann/tint v1.0.6
 	github.com/schollz/progressbar/v3 v3.18.0
 	github.com/spf13/cobra v1.8.1
