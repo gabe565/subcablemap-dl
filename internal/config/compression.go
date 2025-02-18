@@ -2,7 +2,7 @@ package config
 
 import "image/png"
 
-//go:generate go run github.com/dmarkham/enumer -type CompressionLevel -trimprefix Compression -transform lower -text -output compression_string.go
+//go:generate go tool enumer -type CompressionLevel -trimprefix Compression -transform lower -text -output compression_string.go
 
 type CompressionLevel int
 
