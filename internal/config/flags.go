@@ -3,8 +3,6 @@ package config
 import (
 	"strings"
 
-	"gabe565.com/utils/cobrax"
-	"gabe565.com/utils/must"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +23,6 @@ const (
 )
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
-	must.Must(cobrax.RegisterCompletionFlag(cmd))
 	fs := cmd.Flags()
 	fs.Var(&c.BaseURL, FlagBaseURL, "Base tile download URL")
 	fs.BoolVarP(&c.Insecure, FlagInsecure, "k", c.Insecure, "Skip HTTPS TLS verification")

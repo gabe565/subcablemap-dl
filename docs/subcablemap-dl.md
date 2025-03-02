@@ -10,7 +10,6 @@ subcablemap-dl [path] [flags]
 
 ```
       --base-url string      Base tile download URL (default "https://tiles.telegeography.com")
-      --completion string    Generate the autocompletion script for the specified shell (one of bash, zsh, fish, powershell)
   -c, --compression string   PNG compression level (one of default, none, fast, best) (default "default")
       --crop-bottom int      Adjust the number of pixels to crop on the bottom side (can be positive or negative)
       --crop-left int        Adjust the number of pixels to crop on the left side (can be positive or negative)
