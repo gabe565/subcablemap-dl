@@ -168,7 +168,13 @@ func (c *Config) CheckYear(ctx context.Context) error {
 	}
 	if err != nil || resp.StatusCode == http.StatusNotFound {
 		if latest {
-			slog.Warn("Map for " + strconv.Itoa(c.Year) + " is not yet available, downloading " + strconv.Itoa(c.Year-1) + ".")
+			slog.Warn(
+				"Map for " + strconv.Itoa(
+					c.Year,
+				) + " is not yet available, downloading " + strconv.Itoa(
+					c.Year-1,
+				) + ".",
+			)
 			c.Year--
 			return c.CheckYear(ctx)
 		}

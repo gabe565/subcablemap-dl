@@ -20,7 +20,7 @@ func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
 	}
 
 	if conf.Completion == "" {
-		transport := http.DefaultTransport.(*http.Transport).Clone()
+		transport := http.DefaultTransport.(*http.Transport).Clone()               //nolint:errcheck
 		transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: conf.Insecure} //nolint:gosec
 		conf.Client.Transport = httpx.NewUserAgentTransport(transport, cobrax.BuildUserAgent(cmd))
 

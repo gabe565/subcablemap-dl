@@ -4,6 +4,7 @@ import "image/png"
 
 //go:generate go tool enumer -type CompressionLevel -trimprefix Compression -transform lower -text -output compression_string.go
 
+//nolint:recvcheck
 type CompressionLevel int
 
 const (

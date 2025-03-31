@@ -21,11 +21,11 @@ func main() {
 
 func generate(ctx context.Context) error {
 	years := []int{2013, 2014, 2015, 2016, 2017, 2019, 2020, 2021, 2022, 2023, 2024, 2025}
-	const TileWidth, TileHeight, Cols = 256, 183, 4
-	previewImg := image.NewNRGBA(image.Rect(0, 0, TileWidth*Cols, TileHeight*len(years)/Cols))
+	const tileWidth, tileHeight, cols = 256, 183, 4
+	previewImg := image.NewNRGBA(image.Rect(0, 0, tileWidth*cols, tileHeight*len(years)/cols))
 
 	g := gift.New(
-		gift.ResizeToFill(TileWidth, TileHeight, gift.LanczosResampling, gift.CenterAnchor),
+		gift.ResizeToFill(tileWidth, tileHeight, gift.LanczosResampling, gift.CenterAnchor),
 		gift.UnsharpMask(1, 0.5, 0),
 	)
 
@@ -57,8 +57,8 @@ func generate(ctx context.Context) error {
 		}
 
 		pt := image.Point{
-			X: (i % Cols) * TileWidth,
-			Y: (i / Cols) * TileHeight,
+			X: (i % cols) * tileWidth,
+			Y: (i / cols) * tileHeight,
 		}
 		slog.Info("Writing tile", "year", year, "origin", pt)
 		g.DrawAt(previewImg, img, pt, gift.CopyOperator)
