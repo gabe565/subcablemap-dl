@@ -161,3 +161,7 @@ linters:
       - common-false-positives
       - legacy
       - std-error-handling
+    rules:
+      - linters:
+          - noctx
+        text: .*log/slog.* must not be called. use .*log/slog.*Context
