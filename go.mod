@@ -3,7 +3,7 @@ module gabe565.com/subcablemap-dl
 go 1.26.1
 
 require (
-	gabe565.com/utils v0.0.0-20250302063333-ede73b14282c
+	gabe565.com/utils v0.0.0-20251001054419-00a1424779a7
 	github.com/disintegration/gift v1.2.1
 	github.com/lmittmann/tint v1.1.3
 	github.com/schollz/progressbar/v3 v3.18.0
