@@ -9,7 +9,6 @@ import (
 	"image/png"
 	"log/slog"
 	"net/http"
-	"sync"
 
 	"gabe565.com/subcablemap-dl/internal/config"
 	"github.com/schollz/progressbar/v3"
@@ -90,7 +89,6 @@ func (d *DynamicImage) downloadRow(y int) error {
 
 	group, ctx := errgroup.WithContext(d.ctx)
 	group.SetLimit(d.config.Parallelism)
-	var mu sync.Mutex
 
 	for x := range d.config.TilesHorizontal() {
 		group.Go(func() error {
@@ -99,8 +97,6 @@ func (d *DynamicImage) downloadRow(y int) error {
 				return err
 			}
 
-			mu.Lock()
-			defer mu.Unlock()
 			d.tiles[x] = tileData
 			return nil
 		})
