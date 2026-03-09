@@ -19,6 +19,8 @@ subcablemap-dl [path] [flags]
       --full-image           Download the entire square map instead of cropping
   -h, --help                 help for subcablemap-dl
   -k, --insecure             Skip HTTPS TLS verification
+      --log-format string    Log format (one of auto, color, plain, json) (default "auto")
+      --log-level string     Log level (one of trace, debug, info, warn, error) (default "info")
       --no-progress          Do not show progress bar
   -p, --parallelism int      Number of goroutines to use (default 16)
   -v, --version              version for subcablemap-dl

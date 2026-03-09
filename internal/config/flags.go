@@ -3,10 +3,13 @@ package config
 import (
 	"strings"
 
+	"gabe565.com/utils/slogx"
 	"github.com/spf13/cobra"
 )
 
 const (
+	FlagLogLevel    = "log-level"
+	FlagLogFormat   = "log-format"
 	FlagBaseURL     = "base-url"
 	FlagInsecure    = "insecure"
 	FlagYear        = "year"
@@ -24,6 +27,8 @@ const (
 
 func (c *Config) RegisterFlags(cmd *cobra.Command) {
 	fs := cmd.Flags()
+	fs.Var(&c.LogLevel, FlagLogLevel, "Log level (one of "+strings.Join(slogx.LevelStrings(), ", ")+")")
+	fs.Var(&c.LogFormat, FlagLogFormat, "Log format (one of "+strings.Join(slogx.FormatStrings(), ", ")+")")
 	fs.Var(&c.BaseURL, FlagBaseURL, "Base tile download URL")
 	fs.BoolVarP(&c.Insecure, FlagInsecure, "k", c.Insecure, "Skip HTTPS TLS verification")
 	fs.IntVarP(&c.Year, FlagYear, "y", c.Year, "Year to download (default latest available)")

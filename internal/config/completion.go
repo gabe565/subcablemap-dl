@@ -5,10 +5,23 @@ import (
 	"time"
 
 	"gabe565.com/utils/must"
+	"gabe565.com/utils/slogx"
 	"github.com/spf13/cobra"
 )
 
 func (c *Config) RegisterCompletions(cmd *cobra.Command) {
+	must.Must(cmd.RegisterFlagCompletionFunc(
+		FlagLogLevel,
+		func(_ *cobra.Command, _ []string, _ string) ([]cobra.Completion, cobra.ShellCompDirective) {
+			return slogx.LevelStrings(), cobra.ShellCompDirectiveNoFileComp
+		},
+	))
+	must.Must(cmd.RegisterFlagCompletionFunc(
+		FlagLogFormat,
+		func(_ *cobra.Command, _ []string, _ string) ([]cobra.Completion, cobra.ShellCompDirective) {
+			return slogx.FormatStrings(), cobra.ShellCompDirectiveNoFileComp
+		},
+	))
 	must.Must(cmd.RegisterFlagCompletionFunc(
 		FlagBaseURL,
 		func(_ *cobra.Command, _ []string, _ string) ([]string, cobra.ShellCompDirective) {

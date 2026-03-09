@@ -37,5 +37,7 @@ func Load(ctx context.Context, cmd *cobra.Command) (*Config, error) {
 		}
 	}
 
+	conf.InitLog(cmd.ErrOrStderr())
+
 	return conf, nil
 }

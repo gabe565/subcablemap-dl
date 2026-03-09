@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"gabe565.com/utils/pflagx"
+	"gabe565.com/utils/slogx"
 )
 
 func New() *Config {
@@ -29,6 +30,8 @@ func New() *Config {
 
 type Config struct {
 	Completion  string
+	LogLevel    slogx.Level
+	LogFormat   slogx.Format
 	BaseURL     pflagx.URL
 	Insecure    bool
 	Client      *http.Client
