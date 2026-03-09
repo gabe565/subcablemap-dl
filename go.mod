@@ -6,7 +6,7 @@ require (
 	gabe565.com/utils v0.0.0-20250302063333-ede73b14282c
 	github.com/disintegration/gift v1.2.1
 	github.com/lmittmann/tint v1.1.3
-	github.com/schollz/progressbar/v3 v3.18.0
+	github.com/schollz/progressbar/v3 v3.19.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	golang.org/x/sync v0.20.0
