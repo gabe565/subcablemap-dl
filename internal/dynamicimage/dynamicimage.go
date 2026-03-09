@@ -7,6 +7,7 @@ import (
 	"image/color"
 	"image/draw"
 	"image/png"
+	"log/slog"
 	"net/http"
 	"sync"
 
@@ -113,8 +114,10 @@ func (d *DynamicImage) downloadRow(y int) error {
 }
 
 func DownloadTile(ctx context.Context, conf *config.Config, pt image.Point) (image.Image, error) {
-	url := conf.BuildURL(conf.Year, conf.Zoom, pt, conf.Format)
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url.String(), nil)
+	url := conf.BuildURL(conf.Year, conf.Zoom, pt, conf.Format).String()
+	slog.Debug("Downloading tile", "x", pt.X, "y", pt.Y, "url", url)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
